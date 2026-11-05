@@ -1,0 +1,4 @@
+# Keep text files LF so the committed skill.zip matches the working tree
+# on Windows and Unix checkouts.
+* text=auto eol=lf
+*.zip binary
