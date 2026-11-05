@@ -101,7 +101,7 @@ python tools/pack_skill.py --check
 
 ## 6. 仓库卫生与安全检查
 
-- 19 个文件；最大文档为 `tests/validate.py`（738 行）、`tests/scenarios.md`（534 行）、`SKILL.md`（180 行）。
+- 20 个文件；最大文档为 `tests/validate.py`（738 行）、`tests/scenarios.md`（534 行）、`SKILL.md`（180 行）。
 - 无空目录、无重复长段落、无临时文件、无第三方依赖。
 - SC-05/06/07/08/15 全部通过；人工复核未发现密钥、个人邮箱、本地绝对路径、私人聊天或无关项目数据。
 - 仓库没有 LICENSE 文件；README 已声明许可证未定，公开可见不等于授权复用。
