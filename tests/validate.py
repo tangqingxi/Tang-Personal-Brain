@@ -103,6 +103,20 @@ SCENARIO_TOKENS = {
     "S32": ["Chat Host"],
     "S33": ["指挥官"],
     "S34": ["Objective", "Stop Conditions"],
+    "S35": ["任务指令"],
+    "S36": ["Gate"],
+    "S37": ["Git"],
+    "S38": ["自述"],
+    "S39": ["历史"],
+    "S40": ["未知"],
+    "S41": ["战略参谋"],
+    "S42": ["10"],
+    "S43": ["生活"],
+    "S44": ["质疑"],
+    "S45": ["任务指令"],
+    "S46": ["报告"],
+    "S47": ["错误"],
+    "S48": ["模型"],
 }
 DISPLAY_NAME = "星核 · NEXUS"
 STARTUP_WAIT = "星核 · NEXUS 在线。等待指挥官身份确认。"
@@ -512,11 +526,11 @@ def sc10() -> str:
     return f"1 skill entry, {len(agent_entries)} agent entries"
 
 
-@check("SC-11", "34 behavioural scenarios with required parts")
+@check("SC-11", "48 behavioural scenarios with required parts")
 def sc11() -> str:
     text = read_text("tests/scenarios.md")
     matches = list(re.finditer(r"^## (S\d{2}) — (.+)$", text, re.MULTILINE))
-    expected = [f"S{index:02d}" for index in range(1, 35)]
+    expected = [f"S{index:02d}" for index in range(1, 49)]
     found = [match.group(1) for match in matches]
     if found != expected:
         fail(f"scenario IDs are {found}; expected {expected}")
@@ -529,7 +543,7 @@ def sc11() -> str:
         missing = [token for token in SCENARIO_TOKENS[match.group(1)] if token not in block]
         if missing:
             fail(f"{match.group(1)} is missing coverage token(s): {', '.join(missing)}")
-    return "S01-S34 with type/input/expected/criteria"
+    return "S01-S48 with type/input/expected/criteria"
 
 
 @check("SC-12", "no unfinished TODO placeholders")
@@ -719,13 +733,13 @@ def sc20() -> str:
 @check("SC-21", "README does not disclose the startup passphrase or Q&A")
 def sc21() -> str:
     readme = read_text("README.md")
-    for forbidden in (STARTUP_WAIT, STARTUP_WELCOME, "指挥官", "身份确认"):
+    for forbidden in (STARTUP_WAIT, STARTUP_WELCOME, "身份确认"):
         if forbidden in readme:
             fail(f"README discloses startup content: {forbidden}")
     without_urls = re.sub(r"https?://\S+", "", readme)
     if "tangqingxi" in without_urls:
         fail("README contains the identity string outside the repository URL")
-    return "no startup lines, commander title, or standalone identity string"
+    return "no startup lines, success response, or standalone identity string"
 
 
 @check("SC-22", "display name is 星核 · NEXUS and technical identifiers are unchanged")
@@ -748,6 +762,51 @@ def sc22() -> str:
     if "$tang-personal-brain" not in openai:
         fail("openai.yaml no longer references the skill identifier")
     return "星核 · NEXUS in README/SKILL/openai.yaml; tang-personal-brain unchanged"
+
+
+@check("SC-23", "v0.5 execution-efficiency rules are present")
+def sc23() -> str:
+    skill = read_text("SKILL.md")
+    decision = read_text("references/decision-governance.md")
+    orchestration = read_text("references/orchestration.md")
+    skill_terms = ["Draft-only", "R0", "R1", "R2", "R3", "Git owns committed source"]
+    decision_terms = [
+        "Risk-adaptive authorization",
+        "Git-native workflow",
+        "Process cost",
+        "Four evidence claims",
+    ]
+    orchestration_terms = ["Draft-only", "Adaptive length", "gates"]
+    missing = [term for term in skill_terms if term not in skill]
+    missing += [term for term in decision_terms if term not in decision]
+    missing += [term for term in orchestration_terms if term not in orchestration]
+    if missing:
+        fail("v0.5 rules missing: " + ", ".join(missing))
+    return "intents, R0-R3, Git-native, process cost, adaptive brief and evidence claims present"
+
+
+@check("SC-24", "NEXUS persona continuity in core and references")
+def sc24() -> str:
+    skill = read_text("SKILL.md")
+    communication = read_text("references/communication.md")
+    context = read_text("references/context-evolution.md")
+    skill_terms = [
+        "Persona continuity",
+        "Strategic Intelligence Core",
+        "战略智能中枢",
+        "sparingly",
+        "answer host-model questions truthfully",
+    ]
+    missing = [term for term in skill_terms if term not in skill]
+    if "Persona and address" not in communication:
+        missing.append("communication.md Persona and address")
+    if "Persona continuity" not in context:
+        missing.append("context-evolution.md Persona continuity")
+    if 'do not use "指挥官" in normal replies' in skill:
+        missing.append("absolute commander prohibition still present")
+    if missing:
+        fail("persona rules missing or contradictory: " + ", ".join(missing))
+    return "strategic staff stance, address frequency, truthful host model, no separate persona state"
 
 
 def run_checks() -> int:

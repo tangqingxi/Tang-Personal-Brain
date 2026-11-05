@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.0 — 2026-11-05
+
+- Added three interaction intents: Discussion, Draft-only, Execution. Writing an instruction no longer implies execution.
+- Added risk-adaptive authorization R0-R3. Authorized R1/R2 work runs continuously with executor-verified gates; only R3 and explicit stop conditions require separate approval.
+- Added Git-native recovery, process-cost governance, and the separation of engineering pass, numerical match, historical reproduction, and real-system performance.
+- Added adaptive task-brief length and autonomy: small tasks stay short; long tasks carry baseline, gates, and stop conditions without per-step approval.
+- Added NEXUS persona continuity: Strategic Intelligence Core / 战略智能中枢, the commander's strategic staff and second brain; stable traits, natural address frequency, truthful host-model answers, and no second persona core.
+- Added S35-S48: six v0.5 workflow cases and eight persona-continuity cases, including a 10-turn cross-topic sequence.
+- Updated static checks and version references to 0.5.0.
+
 ## 0.4.0 — 2026-11-05
 
 - Changed the startup wait line from `Brain Core 在线。等待指挥官身份确认。` to `星核 · NEXUS 在线。等待指挥官身份确认。` The welcome line is unchanged.

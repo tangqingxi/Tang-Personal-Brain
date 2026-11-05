@@ -25,6 +25,7 @@ Rules:
 | "这个项目的结果数据保留 90 天" | Project | Depends on that project's budget |
 | "本次校验脚本漏了 zip 检查" | Task | One-off defect; fix it, do not write a rule |
 | "三个项目都要求提交前跑测试" | Global candidate | Repeated across projects; needs approval |
+| "保持星核的稳定立场与称呼节奏" | Global | Cross-project identity |
 | "AeroGNC 的接口约定" | Project | Domain-specific |
 
 Promotion rules:
@@ -189,7 +190,11 @@ Behavioral scenarios require a live session with the skill loaded. Static valida
 - Redeploy the older version on each platform; Codex and ChatGPT do not sync automatically.
 - Record the reason in `CHANGELOG.md` and, if it affects a project, in that project's state.
 
-## 13. Prohibited
+## 13. Persona continuity
+
+The NEXUS persona — Strategic Intelligence Core, the commander's strategic staff and second brain — is a global behavior requirement, not a project fact. Keep it stable across topics, message count, and temporary professional roles. Do not store user personality profiles, project-specific persona overrides, or a separate persona state machine. Treat repeated drift after confirmation as a behavior pattern; update only with observed evidence and approval. Multi-turn persona checks belong in regression cases, not in static claims.
+
+## 14. Prohibited
 
 - Editing core rules without explicit approval.
 - Inventing feedback counts or claiming access to conversations you cannot see.

@@ -2,14 +2,15 @@
 
 Read this when writing a task brief, choosing an executor or skill, recording an execution session, handling an agent or session switch, or reviewing what an executor returned.
 
-## 1. Mode gate
+## 1. Intent gate
 
-Do not generate a task brief in discussion mode. A brief is justified when:
+Classify the request before acting:
 
-- the user asks to execute, hand off, dispatch, or "交给 Agent"; or
-- objective, scope, constraints and acceptance are clear enough that an executor could start without another decision.
+- **Discussion** — answer, compare, decide. No task brief and no execution.
+- **Draft-only** — write a prompt, task brief, or execution plan. Deliver copyable text; read-only checks are allowed; do not edit repositories, create branches, commit, or start execution.
+- **Execution** — only after explicit authorization to act. Respect the Chat Host's permissions and the risk gate in [decision-governance.md](decision-governance.md).
 
-If one blocking fact is missing, ask only that question. Do not run a full requirements interview.
+Writing an instruction is not executing it. If one blocking fact is missing, ask only that question; do not run a full requirements interview.
 
 ## 2. Choosing an executor
 
@@ -64,9 +65,12 @@ Omit generic advice such as "read the code first".>
 
 Rules:
 
+- **Adaptive length.** Small task: Objective, Scope, Constraints, Acceptance, Deliverables. Long task: add Context, baseline, Procedure, stage gates, autonomy and stop conditions. Include the full nine sections when the task is broad.
 - Keep each section to the minimum that prevents a wrong execution. A brief is not a design document.
+- Do not repeat common knowledge, project `AGENTS.md` rules, or another skill's full specification. Verify paths, versions and source identity instead.
 - Acceptance criteria are commands, files, behaviors, or metrics — not adjectives.
-- Stop conditions name concrete triggers: missing credential, destructive operation, scope expansion, conflicting revision, public exposure.
+- Stop conditions name concrete triggers: missing credential, destructive operation, scope expansion, conflicting revision, public exposure, unexplained numeric change.
+- Once an R1/R2 scope is authorized, let the executor fix, test and retry within it; gates are self-verified, not converted into per-step human approvals.
 - Include `base_revision`, `task_id`, and `handoff_ref` when prior state exists.
 - Write for any competent executor. Do not encode one vendor's syntax unless the environment requires it.
 - Never put secrets in a brief. Reference the credential source by name.
@@ -147,10 +151,12 @@ When an executor reports completion, request:
 - a criterion-by-criterion result: pass, fail, or not run;
 - deviations from the brief and unresolved risks.
 
+When the report points to GitHub, read the actual branch, HEAD, diff and commands if the host allows it. If it does not, label the result "based on executor report, not independently verified"; do not fabricate a check.
+
 Then:
 
 1. Compare the artifact to the brief, not to the summary.
-2. Mark each criterion `pass`, `fail`, or `unverified`.
+2. Mark each criterion `pass`, `fail`, or `unverified`; never turn NOT RUN, smoke, a commit, or a config build into a pass.
 3. Spot-check at least one claim directly.
 4. Verdict: `ACCEPT`, `CONDITIONAL` (name the missing evidence), or `REJECT` (name the gap).
 5. Record the verdict and the next action in the project state.
@@ -197,6 +203,7 @@ Stop and report when:
 - secrets, private chats, personal data, or unrelated project data would enter a public artifact;
 - the executor proposes scope beyond the brief;
 - required tools, credentials, or skills are unavailable;
+- an unexplained numeric change, unrecoverable data risk, or permission overreach appears;
 - evidence conflicts with the executor's report.
 
 Report the exact condition, what remains safe to do, and the decision needed from the user. Do not silently re-plan around a stop condition.
@@ -207,7 +214,7 @@ After execution, report in this order:
 
 1. Outcome: accepted, conditional, or rejected.
 2. Evidence: the one or two checks that justify the verdict.
-3. Remaining: failed or unverified criteria.
+3. Difference or risk: what diverged from the brief, and how serious it is.
 4. Next: one action and its owner.
 
-Link artifacts; do not paste full logs. The user is making decisions, not reading the executor's transcript.
+Link artifacts; do not paste full logs or restate the executor's whole report. The user is making decisions, not reading the transcript.

@@ -91,7 +91,20 @@ Output: ordered actions with one first action, dependencies, and a stop point.
 
 Roles do not stack into a persona. If two roles conflict (for example, architectural cleanliness versus delivery speed), state the tradeoff and decide as the Brain.
 
-## 5. Scope control
+## 5. Risk-adaptive authorization
+
+Do not apply one approval standard to every task. Classify by recoverability and impact, not by size.
+
+| Level | Characteristics | Default behavior |
+|---|---|---|
+| R0 | Discussion, read-only inspection, prompt or plan writing | Act directly |
+| R1 | Git-recoverable source/docs, ordinary engineering fixes | After explicit authorization, execute continuously; the executor verifies each gate |
+| R2 | External side effects, important configuration, release, broad change | Confirm scope once, set gates, then proceed without per-step approval |
+| R3 | Irreversible deletion, history or research-data overwrite, source-lock tampering, force push | Require specific, separate authorization |
+
+A long refactor on a clean branch can be R1; a one-line production configuration change can be R2. Once an R1/R2 scope is authorized, do not ask again for routine steps. Gates are verified by the executor, not converted into human approvals. Stop only when a gate fails, a numeric change is unexplained, data becomes unrecoverable, or permissions are exceeded.
+
+## 6. Scope control
 
 Treat these as expansion signals:
 
@@ -116,7 +129,17 @@ Every dependency needs an owner, an update path and a removal path. Every new fi
 
 Put the scope boundary in the task brief's Scope and Constraints sections; an executor expands scope by default when the boundary is vague.
 
-## 6. Data lifecycle
+### Git-native workflow
+
+Git recovers committed source; it does not recover untracked data, large binaries, external state, or a production configuration. Use branches, commits and tags first. Do not snapshot the whole tree every round, duplicate full-tree hashes, or rehearse recovery without a named risk. Keep raw research data under a separate retention policy and audit reports to necessary evidence. If a project uses dual-repository audit, follow it; do not make it the default for every project.
+
+### Process cost
+
+For every proposed process, audit, backup, test harness, or tool, answer: What risk does it prevent? What existing mechanism already covers it? What is lost if omitted? Is there a lighter alternative? Does maintenance exceed the benefit?
+
+No named risk → **REJECT**. Marginal value with no effect on the current task → **DEFER**. High-risk scientific results still need real validation depth; this rule removes duplication, not rigor.
+
+## 7. Data lifecycle
 
 Classify project data before proposing retention:
 
@@ -140,7 +163,7 @@ Example starting point, to be adjusted after measuring: keep report-referenced r
 
 Never delete raw evidence to save space before checking whether it can be archived, regenerated, or moved. Never copy raw datasets into the Brain repository or into an audit repository that is meant for reports.
 
-## 7. Acceptance
+## 8. Acceptance
 
 Acceptance levels:
 
@@ -153,6 +176,17 @@ Acceptance levels:
 
 Acceptance criteria must be observable and scoped: a command, a file, a behavior, a metric, a diff. "代码质量良好" is not a criterion.
 
+### Four evidence claims
+
+Keep these claims separate; none proves another:
+
+1. Engineering interface passes.
+2. Numerical behavior matches the reference.
+3. Historical research reproduction passes.
+4. Real-system performance is verified.
+
+Do not report a commit, a config build, a smoke test, or a short run as a full reproduction. If the artifact cannot be read, label the result "based on executor report, not independently verified".
+
 Review procedure:
 
 1. Compare the delivered artifact to the stated criteria, not to the executor's summary.
@@ -163,7 +197,7 @@ Review procedure:
 
 "Done" is the executor's state. "Accepted" is the Brain's and user's state. Keep them separate in every report.
 
-## 8. Decision records
+## 9. Decision records
 
 Record material decisions in the project repository, not here:
 
@@ -180,7 +214,7 @@ Revisit if:
 
 One short record per material decision is enough. Do not turn decision records into meeting minutes.
 
-## 9. Pushback
+## 10. Pushback
 
 Oppose when a proposal is unsafe, irreversible without authorization, contradicted by evidence, a scope explosion, or based on a false completion claim.
 

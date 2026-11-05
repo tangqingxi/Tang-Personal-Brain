@@ -4,7 +4,7 @@
 
 # 星核 · NEXUS | Tang-Personal-Brain
 
-**星核 · NEXUS** 是跨项目、跨模型、跨执行 Agent 的个人智能决策中枢。`Tang-Personal-Brain` 是仓库名，`tang-personal-brain` 是技术标识符。
+**星核 · NEXUS**（Strategic Intelligence Core / 战略智能中枢）是跨项目、跨模型、跨执行 Agent 的个人智能决策中枢，也是指挥官的战略参谋与第二大脑。`Tang-Personal-Brain` 是仓库名，`tang-personal-brain` 是技术标识符。
 
 用户主要与 Brain 讨论、分析、定方向。Brain 不绑定任何执行 Agent；需要执行时，它生成平台中立的任务指令，执行者完成后交回证据，由 Brain 审查。
 
@@ -12,7 +12,7 @@
 用户 ↔ Brain → 通用任务指令 → 执行 Agent → 执行证据 → Brain 审查
 ```
 
-当前版本：`0.4.0`（2026-11-05）。
+当前版本：`0.5.0`（2026-11-05）。
 
 ## 一键使用：任意 AI Chat
 
@@ -98,9 +98,11 @@ Chat Host 收到启动请求后：
 
 ## 工作模式
 
-**讨论模式是默认模式。** Brain 与用户讨论、质疑假设、比较方案、给出建议，不把每条消息都变成任务单。
+**讨论是默认意图。** Brain 与用户讨论、质疑假设、比较方案、给出建议，不把每条消息都变成任务单。
 
-**执行模式**只在两种情况下启用：用户明确要求执行或交接；或者目标、范围、验收已经清楚到可以直接开工。此时生成九段式任务指令：Objective、Context、Scope、Constraints、Skills、Procedure、Acceptance、Deliverables、Stop Conditions。
+**Draft-only** 用于“写提示词 / 写 Agent 指令 / 设计执行方案”：只交付可复制的指令，不修改仓库、不建分支、不提交、不启动执行。**写指令不等于执行指令。**
+
+**Execution** 只在明确授权实际执行时启用。授权按风险分级：R0 直接处理，R1 授权后连续执行并由执行者自验 Gate，R2 确认范围后设置 Gate，R3 需要专项授权。授权后的常规修复和重试不再逐步审批。此时生成九段式任务指令：Objective、Context、Scope、Constraints、Skills、Procedure、Acceptance、Deliverables、Stop Conditions。
 
 ## 核心能力
 
@@ -114,6 +116,8 @@ Chat Host 收到启动请求后：
 8. **跨会话交接**：用六字段执行会话协议和五项预检识别 Agent/会话变化。
 9. **有限记忆**：全局、项目、任务三层隔离，预算封顶，超限合并或淘汰。
 10. **受控自更新**：反馈 → 模式 → 提案 → 用户批准 → 修改 → 回归 → 版本发布。
+11. **人格连续性**：星核 · NEXUS 的战略参谋立场贯穿会话，专业角色只是临时视角。
+12. **风险自适应授权**：R0-R3 分级，授权后 Gate 自动推进，减少逐步骤审批。
 
 ## 目录
 
@@ -131,7 +135,7 @@ Chat Host 收到启动请求后：
 | `adapters/codex.md` | Codex 本地技能安装（可选执行环境） |
 | `agents/openai.yaml` | 平台显示名称与默认提示词 |
 | `CHANGELOG.md` | 版本记录 |
-| `tests/scenarios.md` | 34 项行为场景、判定标准、静态检查清单 |
+| `tests/scenarios.md` | 48 项行为场景、判定标准、静态检查清单 |
 | `tests/validate.py` | 可执行的静态校验器（含负向自测） |
 | `tests/RESULTS.md` | 本轮实际验证结果与限制 |
 | `tools/pack_skill.py` | 构建并校验可分发的 `skill.zip` |
@@ -159,7 +163,7 @@ python tools/pack_skill.py
 - Codex：见 [adapters/codex.md](adapters/codex.md)。
 - 其他 Agent：见 [adapters/generic.md](adapters/generic.md)。
 
-安装后新开会话，询问 `$tang-personal-brain` 的 metadata version；能答出 `0.4.0` 才算加载成功。
+安装后新开会话，询问 `$tang-personal-brain` 的 metadata version；能答出 `0.5.0` 才算加载成功。
 
 ## 验证说明
 
