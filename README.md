@@ -2,9 +2,9 @@
 按此仓库的 Brain 规范与我对话：https://github.com/tangqingxi/Tang-Personal-Brain
 ```
 
-# Tang-Personal-Brain
+# 星核 · NEXUS | Tang-Personal-Brain
 
-跨项目、跨模型、跨执行 Agent 的个人智能决策中枢。
+**星核 · NEXUS** 是跨项目、跨模型、跨执行 Agent 的个人智能决策中枢。`Tang-Personal-Brain` 是仓库名，`tang-personal-brain` 是技术标识符。
 
 用户主要与 Brain 讨论、分析、定方向。Brain 不绑定任何执行 Agent；需要执行时，它生成平台中立的任务指令，执行者完成后交回证据，由 Brain 审查。
 
@@ -12,13 +12,13 @@
 用户 ↔ Brain → 通用任务指令 → 执行 Agent → 执行证据 → Brain 审查
 ```
 
-当前版本：`0.2.0`（2026-11-05）。
+当前版本：`0.3.0`（2026-11-05）。
 
 ## 一键使用：任意 AI Chat
 
 1. 复制本页最顶部的启动提示词。
 2. 粘贴到任意能读取网页或 GitHub 的 AI Chat。
-3. 让 Chat Host 按 README → `SKILL.md` → 当前任务需要的 `references/` 的顺序加载，然后直接正常聊天。
+3. 让 Chat Host 按 README → `SKILL.md` → 当前任务需要的 `references/` 的顺序加载，完成一次简短启动确认后正常聊天。
 
 不需要安装 Skill、插件，也不需要进入 Work 或 Agent 模式。
 
@@ -84,8 +84,8 @@ Chat Host 收到启动请求后：
 - 保持普通聊天，不进入项目开发模式或 Agent 执行模式。
 - 不输出完整初始化报告，不复述全部功能，不介绍项目结构。
 - 不自动询问“要开发什么”，不默认启动某个项目，不自动生成 Task Brief。
-- 如果用户只发送了加载请求，用一句话确认即可，例如：`已读取 Tang-Personal-Brain v0.2.0，可以直接交流。`
-- 如果用户同时提出具体问题，直接回答问题，不先做初始化说明。
+- 首次成功加载后，按核心规范执行一次启动确认；启动问答不在本页展示。确认完成后进入普通聊天。
+- 启动确认完成后，如果用户同时提出了具体问题，直接回答，不先做额外初始化说明。
 
 ## 它解决什么问题
 
@@ -129,21 +129,18 @@ Chat Host 收到启动请求后：
 | `adapters/generic.md` | 通用 Chat 加载、能力差异与离线备用方案 |
 | `adapters/chatgpt.md` | ChatGPT 原生 Skill 安装（可选） |
 | `adapters/codex.md` | Codex 本地技能安装（可选执行环境） |
-| `tests/scenarios.md` | 24 项行为场景、判定标准、静态检查清单 |
+| `agents/openai.yaml` | 平台显示名称与默认提示词 |
+| `CHANGELOG.md` | 版本记录 |
+| `tests/scenarios.md` | 34 项行为场景、判定标准、静态检查清单 |
 | `tests/validate.py` | 可执行的静态校验器（含负向自测） |
 | `tests/RESULTS.md` | 本轮实际验证结果与限制 |
 | `tools/pack_skill.py` | 构建并校验可分发的 `skill.zip` |
+| `LICENSE` | MIT 许可证 |
 | `skill.zip` | 分发包，根目录为 `tang-personal-brain/` |
 
 ## 快速开始
 
-任意 AI Chat 的普通用法：
-
-1. 复制本页最顶部的启动提示词。
-2. 粘贴到 Chat Host。
-3. 直接开始对话，不需要安装。
-
-可选的本地校验与打包：
+通用 Chat 用法见上文「一键使用」。以下是可选的本地校验与打包：
 
 ```bash
 # 静态校验（标准库，无第三方依赖）
@@ -162,7 +159,7 @@ python tools/pack_skill.py
 - Codex：见 [adapters/codex.md](adapters/codex.md)。
 - 其他 Agent：见 [adapters/generic.md](adapters/generic.md)。
 
-安装后新开会话，询问 `$tang-personal-brain` 的 metadata version；能答出 `0.2.0` 才算加载成功。
+安装后新开会话，询问 `$tang-personal-brain` 的 metadata version；能答出 `0.3.0` 才算加载成功。
 
 ## 验证说明
 
@@ -198,4 +195,4 @@ GitHub 推送不会让 ChatGPT、Codex 或其他宿主自动同步。更新步�
 
 ## License
 
-尚未选择许可证。公开可见不等于授权复用；在用户确定许可证之前，默认保留所有权利。
+[MIT License](LICENSE)。

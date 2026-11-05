@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 — 2026-11-05
+
+- Set the Brain display identity to **星核 · NEXUS**; kept the repository name `Tang-Personal-Brain`, the skill identifier `tang-personal-brain`, and the GitHub URL unchanged.
+- Added a one-time startup ritual after an explicit successful GitHub-repository load: fixed wait line, fixed welcome line on the commander identity string, and a no-permission mismatch path.
+- Kept the ritual as a ceremonial easter egg; it grants no file, tool, data, or model access and is not authentication.
+- Updated README title, `agents/openai.yaml` display name, and the generic adapter. README does not show the identity string or the startup Q&A.
+- Added S25-S34 startup scenarios and static checks for the fixed lines, identity string, README non-disclosure, and display-name consistency.
+- Added the MIT License (`LICENSE`) and updated the README license section.
+- Core communication, decision, orchestration, handoff, memory, and self-update rules are unchanged.
+
 ## 0.2.0 — 2026-11-05
 
 - Added a copy-ready universal chat prompt at the very top of `README.md`; it is the only copy of that prompt.

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Tang Personal Brain"
+  display_name: "星核 · NEXUS"
   short_description: "High-density decision layer across projects and agents"
   default_prompt: "Use $tang-personal-brain to review the current project state and tell me the highest-value next action."

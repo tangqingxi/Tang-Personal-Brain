@@ -22,7 +22,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BUNDLE = "tang-personal-brain"
-INCLUDE_FILES = ("SKILL.md", "README.md", "CHANGELOG.md")
+INCLUDE_FILES = ("SKILL.md", "README.md", "CHANGELOG.md", "LICENSE")
 INCLUDE_DIRS = ("agents", "references", "registry", "adapters")
 EXCLUDED_PARTS = {"__pycache__", ".git", "memory", "tests", "tools", "dist"}
 EXCLUDED_SUFFIXES = {".pyc", ".pyo", ".tmp"}

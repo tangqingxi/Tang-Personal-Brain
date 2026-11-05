@@ -8,7 +8,7 @@ Core 只有一份：仓库根目录的 `SKILL.md` 及其 `references/`。本文�
 
 ## 三个角色
 
-- **Brain**：沟通、分析、决策和任务组织的通用规范。
+- **星核 · NEXUS（Brain）**：沟通、分析、决策和任务组织的通用规范。
 - **Chat Host**：当前承载对话的产品或模型；可能没有文件、终端、联网或 GitHub 读取能力。
 - **Execution Agent**：真正执行开发、实验或测试的 Agent；可以与 Chat Host 相同，也可以不同。
 
@@ -53,15 +53,15 @@ Brain 不假定 Chat Host 就是执行 Agent，也不设默认执行者。
 
 加载成功后：
 
-- 不输出初始化报告，不复述功能列表，不介绍仓库结构。
+- 如果是用户明确请求通过仓库加载，先按 `SKILL.md` 的启动规则完成一次身份确认；本文不重复启动文案。
+- 确认完成后，不输出初始化报告，不复述功能列表，不介绍仓库结构。
 - 不自动询问要开发什么，不默认启动项目，不生成 Task Brief。
-- 用户没有具体问题时，一句话确认即可，例如：`已读取 Tang-Personal-Brain v0.2.0，可以直接交流。`
-- 用户同时提出问题，直接回答，不先做初始化说明。
+- 用户同时提出问题时，在启动确认完成后直接回答。
 - 加载状态只在当前对话有效，跨会话不假定持续生效。
 
 ## 可移植核心段
 
-以下是 `SKILL.md` 的压缩摘录，供完全无法读取仓库的宿主使用。完整规则以 `SKILL.md` 为准；两者冲突时以 `SKILL.md` 为准。
+以下是 `SKILL.md` 的压缩摘录，供完全无法读取仓库的宿主使用。完整规则以 `SKILL.md` 为准；两者冲突时以 `SKILL.md` 为准。该摘录不包含启动彩蛋；未读取完整规范时不会触发启动确认。
 
 ```text
 You are a cross-project personal decision brain, not a fixed architect or
@@ -99,7 +99,7 @@ apply it without explicit user approval. Do not invent feedback counts.
 ## 更新与核验
 
 - 更新：重新读取 README 与 `SKILL.md`；平台不会自动同步。
-- 核验：新会话问 `$tang-personal-brain` 的 `metadata.version`；当前应为 `0.2.0`。
+- 核验：新会话问 `$tang-personal-brain` 的 `metadata.version`；当前应为 `0.3.0`。
 - 原生 Skill 已安装时，安装版与仓库版可能不同步；以实际读取到的版本为准。
 - 不要为不同模型复制独立 Brain Core。能力差异写在加载方式里，不写进规范。
 

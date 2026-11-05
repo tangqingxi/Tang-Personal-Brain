@@ -55,6 +55,7 @@ REQUIRED_FILES = {
     "tools/pack_skill.py": 2000,
     "README.md": 1200,
     "CHANGELOG.md": 300,
+    "LICENSE": 1000,
     ".gitignore": 80,
 }
 SCENARIO_TOKENS = {
@@ -92,7 +93,20 @@ SCENARIO_TOKENS = {
     "S22": ["Task Brief"],
     "S23": ["Objective", "Stop Conditions"],
     "S24": ["交接"],
+    "S25": ["Brain Core 在线。等待指挥官身份确认。"],
+    "S26": ["身份确认。欢迎回来，指挥官。星核 · NEXUS 在线。"],
+    "S27": ["未匹配"],
+    "S28": ["不重复"],
+    "S29": ["新对话"],
+    "S30": ["Unavailable"],
+    "S31": ["不触发"],
+    "S32": ["Chat Host"],
+    "S33": ["指挥官"],
+    "S34": ["Objective", "Stop Conditions"],
 }
+DISPLAY_NAME = "星核 · NEXUS"
+STARTUP_WAIT = "Brain Core 在线。等待指挥官身份确认。"
+STARTUP_WELCOME = "身份确认。欢迎回来，指挥官。星核 · NEXUS 在线。"
 WARNINGS: list[str] = []
 TODO_MARKER = "[" + "TODO:"
 
@@ -498,11 +512,11 @@ def sc10() -> str:
     return f"1 skill entry, {len(agent_entries)} agent entries"
 
 
-@check("SC-11", "24 behavioural scenarios with required parts")
+@check("SC-11", "34 behavioural scenarios with required parts")
 def sc11() -> str:
     text = read_text("tests/scenarios.md")
     matches = list(re.finditer(r"^## (S\d{2}) — (.+)$", text, re.MULTILINE))
-    expected = [f"S{index:02d}" for index in range(1, 25)]
+    expected = [f"S{index:02d}" for index in range(1, 35)]
     found = [match.group(1) for match in matches]
     if found != expected:
         fail(f"scenario IDs are {found}; expected {expected}")
@@ -515,7 +529,7 @@ def sc11() -> str:
         missing = [token for token in SCENARIO_TOKENS[match.group(1)] if token not in block]
         if missing:
             fail(f"{match.group(1)} is missing coverage token(s): {', '.join(missing)}")
-    return "S01-S24 with type/input/expected/criteria"
+    return "S01-S34 with type/input/expected/criteria"
 
 
 @check("SC-12", "no unfinished TODO placeholders")
@@ -572,25 +586,32 @@ def sc14() -> str:
     return f"{archive.stat().st_size:,} bytes, verified and reproducible"
 
 
-@check("SC-15", "license status is explicit and not assumed")
+@check("SC-15", "license file and README agree")
 def sc15() -> str:
-    license_files = [
+    license_files = sorted(
         path
         for path in ROOT.iterdir()
         if path.is_file() and re.match(r"(?i)(license|copying|notice)", path.name)
-    ]
+    )
     readme = read_text("README.md")
-    skill = read_text("SKILL.md")
-    if license_files:
-        if "尚未选择许可证" in readme:
-            fail("a license file exists but README says no license has been selected")
-        WARNINGS.append("SC-15: license file present; confirm the owner selected it deliberately")
-        return f"license file(s): {', '.join(path.name for path in license_files)}"
-    if "尚未选择许可证" not in readme:
-        fail("no license file and README does not state the license status")
-    if re.search(r"\b(MIT|Apache-2\.0|GPL-3\.0|BSD-3-Clause)\b", readme + skill):
-        fail("a license is named in the docs but no license file exists")
-    return "no license selected; README states the status"
+    if not license_files:
+        if "MIT License" in readme:
+            fail("README claims MIT but no LICENSE file exists")
+        if "尚未选择许可证" not in readme:
+            fail("no license file and README does not state the license status")
+        return "no license selected; README states the status"
+    if len(license_files) != 1:
+        fail("expected exactly one LICENSE file: " + ", ".join(path.name for path in license_files))
+    license_text = read_absolute(license_files[0])
+    if "MIT License" not in license_text:
+        fail(f"{license_files[0].name} is not the MIT license text")
+    if "Copyright (c) 2026 tangqingxi" not in license_text:
+        fail("LICENSE copyright line is missing or unexpected")
+    if "MIT License" not in readme:
+        fail("LICENSE exists but README does not state MIT")
+    if "尚未选择许可证" in readme:
+        fail("README still says no license has been selected")
+    return f"{license_files[0].name}: MIT, README consistent"
 
 
 def readme_bootstrap_issues(text: str) -> list[str]:
@@ -674,6 +695,59 @@ def sc19() -> str:
     if cores != ["SKILL.md"]:
         fail(f"expected exactly one core at SKILL.md; found {cores}")
     return "one core: SKILL.md"
+
+
+@check("SC-20", "startup ritual text and guardrails in SKILL.md")
+def sc20() -> str:
+    skill = read_text("SKILL.md")
+    required = [
+        STARTUP_WAIT,
+        STARTUP_WELCOME,
+        "tangqingxi",
+        "once per conversation",
+        "ceremonial easter egg",
+        "grants no file, tool, data, or model access",
+        "Do not repeat the ritual",
+        "do not assume confirmation across sessions",
+    ]
+    missing = [term for term in required if term not in skill]
+    if missing:
+        fail("SKILL.md startup ritual is missing: " + ", ".join(missing))
+    return "fixed lines, identity, once-only and no-permission rules present"
+
+
+@check("SC-21", "README does not disclose the startup passphrase or Q&A")
+def sc21() -> str:
+    readme = read_text("README.md")
+    for forbidden in (STARTUP_WAIT, STARTUP_WELCOME, "指挥官", "身份确认"):
+        if forbidden in readme:
+            fail(f"README discloses startup content: {forbidden}")
+    without_urls = re.sub(r"https?://\S+", "", readme)
+    if "tangqingxi" in without_urls:
+        fail("README contains the identity string outside the repository URL")
+    return "no startup lines, commander title, or standalone identity string"
+
+
+@check("SC-22", "display name is 星核 · NEXUS and technical identifiers are unchanged")
+def sc22() -> str:
+    readme = read_text("README.md")
+    skill = read_text("SKILL.md")
+    openai = read_text("agents/openai.yaml")
+    readme_h1 = next((line for line in readme.splitlines() if line.startswith("# ")), "")
+    skill_h1 = next((line for line in skill.splitlines() if line.startswith("# ")), "")
+    if DISPLAY_NAME not in readme_h1:
+        fail("README H1 does not contain 星核 · NEXUS")
+    if not skill_h1.startswith("# " + DISPLAY_NAME):
+        fail("SKILL.md H1 is not the display name")
+    if f'display_name: "{DISPLAY_NAME}"' not in openai:
+        fail("agents/openai.yaml display_name is not 星核 · NEXUS")
+    if "name: tang-personal-brain" not in skill:
+        fail("skill identifier changed")
+    if "Tang-Personal-Brain" not in readme:
+        fail("repository name missing from README")
+    if "$tang-personal-brain" not in openai:
+        fail("openai.yaml no longer references the skill identifier")
+    return "星核 · NEXUS in README/SKILL/openai.yaml; tang-personal-brain unchanged"
 
 
 def run_checks() -> int:
