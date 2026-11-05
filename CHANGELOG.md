@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 — 2026-11-05
+
+- Added a copy-ready universal chat prompt at the very top of `README.md`; it is the only copy of that prompt.
+- Added the README universal-chat contract: Chat Host / Execution Agent roles, load order, repository navigation, technical boundaries, four load states, and first-load behavior.
+- Added Chat Host neutrality to `SKILL.md`: no model-vendor binding, no assumed browser/terminal/GitHub API/local files, normal chat kept separate from execution, and honest load states.
+- Reworked `adapters/generic.md` for ordinary chat hosts, capability differences, fallback paths, and the portable core excerpt.
+- Marked ChatGPT native Skill installation and Codex local installation as optional, not prerequisites; Codex is not a default executor.
+- Added S16-S24 universal-chat behavioral scenarios. Static checks now cover the README bootstrap block, loading contract, optional adapters, and a single core.
+- No change to memory budgets, self-update rules, registries, or the handoff protocol.
+
 ## 0.1.0 — 2026-11-05
 
 - Initial release of the Tang-Personal-Brain skill.

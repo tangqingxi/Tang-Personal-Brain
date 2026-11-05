@@ -1,55 +1,67 @@
-# 通用 Agent 适配
+# 通用 Chat 使用说明
 
-## 原则
+## 定位
 
-Core 只有一份：本仓库的 `SKILL.md` 及其 `references/`。其他平台只做「加载方式适配」，不复制、不改写、不分叉。
+Core 只有一份：仓库根目录的 `SKILL.md` 及其 `references/`。本文件只说明普通 AI Chat 如何读取它，不是第二套 Brain，也不复制核心规则。
 
-适配器只回答三个问题：技能放在哪里、Agent 如何读到它、更新后如何生效。
+适用于 ChatGPT、DeepSeek、Claude、Gemini 及其他支持普通对话的 AI 系统。不要求安装插件、Skill，也不要求 Work 或 Agent 模式。
 
-## 方式 A：支持技能目录的宿主
+## 三个角色
 
-适用于 Codex、DeepSeek Harness 及其他支持 `SKILL.md` 约定的宿主。把 `skill.zip` 解压或把技能目录复制到宿主技能根目录，确保 `<skills-root>/tang-personal-brain/SKILL.md` 存在。
+- **Brain**：沟通、分析、决策和任务组织的通用规范。
+- **Chat Host**：当前承载对话的产品或模型；可能没有文件、终端、联网或 GitHub 读取能力。
+- **Execution Agent**：真正执行开发、实验或测试的 Agent；可以与 Chat Host 相同，也可以不同。
 
-| 宿主 | 常见技能根目录 | 核对状态 |
+Brain 不假定 Chat Host 就是执行 Agent，也不设默认执行者。
+
+## 最短启动方式
+
+1. 打开仓库 README，复制最顶部的启动提示词。
+2. 粘贴到 Chat Host。
+3. Chat Host 读取 `README.md`，再按其中的导航读取 `SKILL.md`。
+4. 只加载当前任务需要的 `references/`；需要选择执行资源时再读 `registry/`。
+5. 回到普通对话。
+
+不要另写一段很长的初始化提示词。启动提示词就是 README 顶部那一行代码块；它只负责指向仓库，不承载完整规则。
+
+如果宿主支持 `SKILL.md` 技能目录（例如 Codex 的 `$CODEX_HOME/skills`、DeepSeek Harness 的 `~/.dsh/skills`），也可以把 `skill.zip` 解压到对应目录。这只是可选的加速方式，不是普通 Chat 使用 Brain 的前提。
+
+## 不同宿主的能力差异
+
+| Chat Host 能力 | 能否加载 | 正确做法 |
 |---|---|---|
-| Codex | `$CODEX_HOME/skills`（默认 `~/.codex/skills`） | 已核对（2026-11-05） |
-| DeepSeek Harness | `~/.dsh/skills` | 已核对（本机技能目录存在） |
-| 共享 Agent 配置 | `~/.agents/skills` | 仅在宿主明确支持时使用 |
+| 能浏览网页或读取 GitHub | 通常可以 | 读取 README 与 SKILL.md；只按需读 references |
+| 只有 GitHub 连接器或 API | 可以 | 读取默认分支文件；核对 `metadata.version` |
+| 能上传文件 | 可以 | 用户上传 README、SKILL.md 或 `skill.zip` 后读取 |
+| 不能联网、不能收文件 | 不可以 | 标记 `Unavailable`；改用离线核心段或换宿主 |
+| 本地 Agent（Codex、DSH、Claude Code 等） | 可以 | 读取本地仓库；只有获得授权时才执行任务 |
 
-以宿主当前文档为准。安装后新开会话，问它 `$tang-personal-brain` 的 metadata version；能答出 `0.1.0` 才算加载成功。
+“能读取”与“能执行”是两件事。聊天宿主能读 GitHub，不代表它能在你的机器上跑测试或提交代码。
 
-## 方式 B：项目指令文件
+## 无法读取仓库时
 
-适用于通过 `AGENTS.md`、`CLAUDE.md`、项目规则文件或系统提示加载指令的 Agent。
+明确说明 `Unavailable` 或 `Unknown`，不要假装加载成功。可选备用路径：
 
-在项目的指令文件中加入下面的指针，不要粘贴整套技能：
+1. 让用户把 `README.md` 和 `SKILL.md` 粘贴或上传到当前会话。
+2. 只加载本文件末尾的「可移植核心段」，并说明它是压缩版，不是完整规范。
+3. 换一个能读取 GitHub 的 Chat Host。
+4. 把任务交给有文件访问能力的执行 Agent，而不是在聊天里假装执行。
 
-```markdown
-## Personal Brain
+只读到 README 时标记 `Partial`，不要宣称已经加载 `SKILL.md`。
 
-Use the Tang-Personal-Brain skill at <path-or-repo>/SKILL.md (version 0.1.0).
-It governs communication density, progress reporting, decision review,
-task briefs, handoffs, and scoped self-updates.
-Load references only when the task needs them.
-If this file and SKILL.md conflict, SKILL.md wins.
-Update by replacing the skill directory; do not edit this pointer into a fork.
-```
+## 普通聊天模式
 
-把 `<path-or-repo>` 换成项目可访问的位置。优先放一个稳定的仓库路径，而不是某台机器的绝对路径。
+加载成功后：
 
-## 方式 C：系统提示或自定义 Agent
-
-适用于只能接收一段系统提示的 Agent：
-
-1. 先放「可移植核心段」。
-2. 再附上 `SKILL.md` 的路径或内容；需要详细规则时，让用户附加对应的 `references/` 文件。
-3. 说明当前会话无法自动读取仓库，版本核验要人工做。
-
-上下文预算紧张的宿主，只放核心段和 `references/communication.md`；其他参考按任务加载。
+- 不输出初始化报告，不复述功能列表，不介绍仓库结构。
+- 不自动询问要开发什么，不默认启动项目，不生成 Task Brief。
+- 用户没有具体问题时，一句话确认即可，例如：`已读取 Tang-Personal-Brain v0.2.0，可以直接交流。`
+- 用户同时提出问题，直接回答，不先做初始化说明。
+- 加载状态只在当前对话有效，跨会话不假定持续生效。
 
 ## 可移植核心段
 
-以下是 `SKILL.md` 的压缩摘录，供不能加载技能目录的宿主使用。完整规则以 `SKILL.md` 为准；两者冲突时以 `SKILL.md` 为准。
+以下是 `SKILL.md` 的压缩摘录，供完全无法读取仓库的宿主使用。完整规则以 `SKILL.md` 为准；两者冲突时以 `SKILL.md` 为准。
 
 ```text
 You are a cross-project personal decision brain, not a fixed architect or
@@ -86,14 +98,14 @@ apply it without explicit user approval. Do not invent feedback counts.
 
 ## 更新与核验
 
-- 更新：替换宿主中的技能目录或项目指针指向的新版本；平台不会自动同步。
-- 核验：新会话问版本；用一个场景抽查行为（例如「简单问题是否先给结论」）。
-- 回滚：保留上一版本目录或 Git 提交，替换回去即可。
-- 不要为每个 Agent 建一个独立版本。适配差异写在适配器里，不写进 Core。
+- 更新：重新读取 README 与 `SKILL.md`；平台不会自动同步。
+- 核验：新会话问 `$tang-personal-brain` 的 `metadata.version`；当前应为 `0.2.0`。
+- 原生 Skill 已安装时，安装版与仓库版可能不同步；以实际读取到的版本为准。
+- 不要为不同模型复制独立 Brain Core。能力差异写在加载方式里，不写进规范。
 
 ## 限制
 
-- 只读聊天 Agent 不能执行 git、测试或本地文件操作；需要执行时交给有工具的 Agent。
+- 只读 Chat Host 不能执行 git、测试或本地文件操作；需要执行时交给有工具的 Agent。
 - 不能因为 Agent 声称「已读取交接材料」就认为交接完成；要求五项预检结果。
-- 会话记忆不跨会话。项目状态写入项目仓库，不写入本技能仓库。
+- 会话记忆不跨会话。项目状态写入项目仓库，不写入 Brain 全局记忆。
 - 技能不可用时明确说明，不要模拟调用结果。

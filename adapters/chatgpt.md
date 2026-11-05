@@ -1,5 +1,12 @@
 # ChatGPT 适配
 
+## 两种使用方式
+
+1. **通用 Chat（无需安装）**：复制 README 顶部的启动提示词，粘贴到 ChatGPT。前提是当前会话能联网读取 GitHub，或用户上传/粘贴 `README.md` 与 `SKILL.md`。读取不到时标记 `Unavailable`，不要假装加载。
+2. **原生 Skill（可选）**：把 `skill.zip` 安装为 ChatGPT Skill。这是可选的便利方式，不是使用 Tang-Personal-Brain 的前提。
+
+下面保留原生 Skill 的安装、验证与更新说明。
+
 ## 适用条件
 
 ChatGPT 的 Skills 功能面向符合条件的 Business、Enterprise、Healthcare 和 Edu 工作区，并受工作区权限控制。个人账号或未启用该功能的工作区可能看不到入口。
@@ -41,7 +48,7 @@ tang-personal-brain/
 使用 $tang-personal-brain，报告你的 metadata version，并用一句话说明你的默认沟通规则。
 ```
 
-预期：报告 `0.1.0`，并说明「先给结论、按问题复杂度控制长度、区分已验证与未验证」。若回答不出，说明技能未加载或被其他指令覆盖。
+预期：报告 `0.2.0`，并说明「先给结论、按问题复杂度控制长度、区分已验证与未验证」。若回答不出，说明技能未加载或被其他指令覆盖。
 
 ## 更新
 
@@ -54,7 +61,8 @@ GitHub 推送不会让 ChatGPT 自动同步。平台也不会替你检查远端�
 
 ## 限制
 
-- ChatGPT 会话默认没有本地 shell，不能直接检查本地仓库或运行测试。需要执行时，由 Brain 生成任务指令，交给 Codex、DeepSeek 或其他执行 Agent。
+- ChatGPT 会话默认没有本地 shell，不能直接检查本地仓库或运行测试。需要执行时，由 Brain 生成任务指令，交给 Codex、DeepSeek、Claude Code 或其他执行 Agent。
+- 未安装原生 Skill 时，用 README 顶部提示词即可开始；不要把安装 Skill 当作使用前提。
 - 连接器和代码解释器的可用性取决于方案与工作区设置。不要让 Brain 假设它们存在。
 - 技能上传会经过平台扫描；扫描通过不等于内容经你审核。
 - 会话之间不共享项目上下文。项目状态要写进项目仓库，而不是依赖聊天记忆。

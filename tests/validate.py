@@ -36,6 +36,7 @@ TEXT_SUFFIXES = {
 TEXT_NAMES = {".gitignore", ".gitattributes"}
 
 ALLOWED_FRONTMATTER = {"name", "description", "license", "allowed-tools", "metadata"}
+BOOTSTRAP_PROMPT = "按此仓库的 Brain 规范与我对话：https://github.com/tangqingxi/Tang-Personal-Brain"
 REQUIRED_FILES = {
     "SKILL.md": 3000,
     "agents/openai.yaml": 120,
@@ -82,6 +83,15 @@ SCENARIO_TOKENS = {
     "S13": ["AeroGNC-Sim"],
     "S14": ["不可用"],
     "S15": ["公开", "密钥"],
+    "S16": ["链接", "读取"],
+    "S17": ["README", "SKILL.md"],
+    "S18": ["Unavailable"],
+    "S19": ["Partial"],
+    "S20": ["Chat Host"],
+    "S21": ["执行"],
+    "S22": ["Task Brief"],
+    "S23": ["Objective", "Stop Conditions"],
+    "S24": ["交接"],
 }
 WARNINGS: list[str] = []
 TODO_MARKER = "[" + "TODO:"
@@ -488,11 +498,11 @@ def sc10() -> str:
     return f"1 skill entry, {len(agent_entries)} agent entries"
 
 
-@check("SC-11", "15 behavioural scenarios with required parts")
+@check("SC-11", "24 behavioural scenarios with required parts")
 def sc11() -> str:
     text = read_text("tests/scenarios.md")
     matches = list(re.finditer(r"^## (S\d{2}) — (.+)$", text, re.MULTILINE))
-    expected = [f"S{index:02d}" for index in range(1, 16)]
+    expected = [f"S{index:02d}" for index in range(1, 25)]
     found = [match.group(1) for match in matches]
     if found != expected:
         fail(f"scenario IDs are {found}; expected {expected}")
@@ -505,7 +515,7 @@ def sc11() -> str:
         missing = [token for token in SCENARIO_TOKENS[match.group(1)] if token not in block]
         if missing:
             fail(f"{match.group(1)} is missing coverage token(s): {', '.join(missing)}")
-    return "S01-S15 with type/input/expected/criteria"
+    return "S01-S24 with type/input/expected/criteria"
 
 
 @check("SC-12", "no unfinished TODO placeholders")
@@ -583,6 +593,89 @@ def sc15() -> str:
     return "no license selected; README states the status"
 
 
+def readme_bootstrap_issues(text: str) -> list[str]:
+    expected = "```text\n" + BOOTSTRAP_PROMPT + "\n```\n"
+    issues = []
+    if not text.startswith(expected):
+        issues.append("README must begin with the fenced bootstrap prompt before any title")
+    count = text.count(BOOTSTRAP_PROMPT)
+    if count != 1:
+        issues.append(f"bootstrap prompt appears {count} times; expected 1")
+    return issues
+
+
+@check("SC-16", "README top bootstrap block is exact and appears once")
+def sc16() -> str:
+    issues = readme_bootstrap_issues(read_text("README.md"))
+    if issues:
+        fail("; ".join(issues))
+    return "exact top code block; one occurrence"
+
+
+@check("SC-17", "README universal-chat loading contract")
+def sc17() -> str:
+    readme = read_text("README.md")
+    required = [
+        "README.md",
+        "SKILL.md",
+        "references",
+        "registry",
+        "adapters",
+        "tests",
+        "tools",
+        "Chat Host",
+        "Execution Agent",
+        "Loaded",
+        "Partial",
+        "Unavailable",
+        "Unknown",
+        "优先级",
+        "不遍历",
+        "不能保证",
+        "不能假装",
+    ]
+    missing = [term for term in required if term not in readme]
+    if missing:
+        fail("README loading contract is missing: " + ", ".join(missing))
+    return f"{len(required)} contract terms present"
+
+
+@check("SC-18", "Chat Host neutrality and optional native installation")
+def sc18() -> str:
+    skill = read_text("SKILL.md")
+    skill_terms = [
+        "Chat Host",
+        "model vendor",
+        "no browser, terminal",
+        "Unavailable",
+        "Partial",
+    ]
+    missing = [term for term in skill_terms if term not in skill]
+    if missing:
+        fail("SKILL.md is missing Chat Host neutrality terms: " + ", ".join(missing))
+    chatgpt = read_text("adapters/chatgpt.md")
+    if "不是使用 Tang-Personal-Brain 的前提" not in chatgpt:
+        fail("chatgpt.md does not state that native installation is optional")
+    codex = read_text("adapters/codex.md")
+    for term in ("可选执行环境", "不是默认执行 Agent"):
+        if term not in codex:
+            fail(f"codex.md does not state: {term}")
+    return "SKILL.md neutral; native adapters optional"
+
+
+@check("SC-19", "single SKILL.md core, no second Brain Core")
+def sc19() -> str:
+    cores = []
+    for path in ROOT.rglob("SKILL.md"):
+        relative = path.relative_to(ROOT)
+        if any(part in {".git", "memory"} for part in relative.parts):
+            continue
+        cores.append(relative.as_posix())
+    if cores != ["SKILL.md"]:
+        fail(f"expected exactly one core at SKILL.md; found {cores}")
+    return "one core: SKILL.md"
+
+
 def run_checks() -> int:
     print("Tang-Personal-Brain — static validation")
     print("=" * 48)
@@ -650,6 +743,25 @@ def run_self_test() -> int:
     )
 
     _expect("valid frontmatter passes", lambda: validate_frontmatter(valid), False, failures)
+    valid_readme = "```text\n" + BOOTSTRAP_PROMPT + "\n```\n\n# Title\n"
+    _expect(
+        "valid README bootstrap passes",
+        lambda: _require_clean(readme_bootstrap_issues(valid_readme)),
+        False,
+        failures,
+    )
+    _expect(
+        "README without top block is rejected",
+        lambda: _require_clean(readme_bootstrap_issues("# Title\n" + valid_readme)),
+        True,
+        failures,
+    )
+    _expect(
+        "duplicate bootstrap prompt is rejected",
+        lambda: _require_clean(readme_bootstrap_issues(valid_readme + "\n" + BOOTSTRAP_PROMPT + "\n")),
+        True,
+        failures,
+    )
     _expect(
         "bad name is rejected",
         lambda: validate_frontmatter(valid.replace("sample-skill", "Bad_Name")),

@@ -1,5 +1,11 @@
 # Codex 适配
 
+## 定位
+
+Codex 只是可选执行环境之一，**不是默认执行 Agent**。Brain 可以在任意普通 Chat Host 中运行；只有当任务需要本地文件、终端、测试或 git 操作时，才把任务交给 Codex，或交给用户指定的其他 Agent。
+
+只做讨论时不需要安装本技能；复制 README 顶部的启动提示词即可。原生安装用于让 Codex 作为执行环境快速获得完整规范。
+
 ## 适用条件
 
 Codex 通过技能目录发现 `SKILL.md`。用户级技能目录是 `$CODEX_HOME/skills`，未设置 `CODEX_HOME` 时默认 `~/.codex/skills`。安装方式核对时间：2026-11-05，依据本机 Codex 自带的 `skill-installer` 说明。
@@ -53,7 +59,7 @@ $CODEX_HOME/skills/tang-personal-brain/SKILL.md
    使用 $tang-personal-brain，报告 metadata version，并给出你的默认回答结构。
    ```
 
-   预期版本 `0.1.0`，回答先给结论、区分已验证与未验证。
+   预期版本 `0.2.0`，回答先给结论、区分已验证与未验证。
 
 3. 如果技能没有被发现，检查目录层级、文件名大小写和 `SKILL.md` 的 frontmatter；然后重启 Codex 或新开会话。
 
@@ -77,4 +83,5 @@ Expand-Archive -Path .\skill.zip -DestinationPath $skills -Force
 
 - Codex 能否访问网络、git 远端或某块 GPU，取决于本机配置和审批策略；任务指令里要声明所需能力，不要假设。
 - Codex 的会话上下文不会自动跨会话保留。切换会话按 `SKILL.md` 的 Execution Session Protocol 处理。
+- 安装了技能不等于它已成为默认执行者。执行者仍由用户指定，或由用户在接受建议后确认。
 - `agents/openai.yaml` 只提供显示元数据；没有它技能仍可运行。

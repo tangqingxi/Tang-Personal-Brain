@@ -1,3 +1,7 @@
+```text
+按此仓库的 Brain 规范与我对话：https://github.com/tangqingxi/Tang-Personal-Brain
+```
+
 # Tang-Personal-Brain
 
 跨项目、跨模型、跨执行 Agent 的个人智能决策中枢。
@@ -8,7 +12,80 @@
 用户 ↔ Brain → 通用任务指令 → 执行 Agent → 执行证据 → Brain 审查
 ```
 
-当前版本：`0.1.0`（2026-11-05）。
+当前版本：`0.2.0`（2026-11-05）。
+
+## 一键使用：任意 AI Chat
+
+1. 复制本页最顶部的启动提示词。
+2. 粘贴到任意能读取网页或 GitHub 的 AI Chat。
+3. 让 Chat Host 按 README → `SKILL.md` → 当前任务需要的 `references/` 的顺序加载，然后直接正常聊天。
+
+不需要安装 Skill、插件，也不需要进入 Work 或 Agent 模式。
+
+## 通用 Chat 加载约定（Universal Chat Bootstrap）
+
+### 三个角色
+
+| 角色 | 含义 |
+|---|---|
+| Brain | 通用的沟通、分析、决策和任务组织规范；不属于某个模型 |
+| Chat Host | 承载 Brain 的普通对话环境，例如 ChatGPT、DeepSeek、Claude、Gemini 等；可能没有文件、终端、联网或 Agent 权限 |
+| Execution Agent | 实际执行开发、实验、测试的 Agent；可以与 Chat Host 相同，也可以不同，Brain 不假定也不默认 |
+
+Brain 不依赖特定模型厂商，也不预设浏览器、终端、GitHub API 或本地文件权限。它根据当前 Chat Host 实际具备的能力选择读取方式。
+
+### 加载顺序
+
+Chat Host 收到启动请求后：
+
+1. 读取仓库根目录 `README.md`，把它当作导航入口。
+2. 按 README 指引读取 `SKILL.md`，识别核心身份、行为约束和工作方式。
+3. 只读取当前任务需要的 `references/`。
+4. 只有需要选择执行资源时，才读取 `registry/`。
+5. 不加载其他 Skills 的完整实现。
+6. 不遍历 `tests/`、`tools/` 或整个仓库。
+7. 加载完成后回到普通对话，不自动生成任务指令。
+
+优先级：**`SKILL.md` → 当前任务需要的 `references/` → 必要时的 `registry/`。**
+
+### 仓库导航
+
+| 路径 | 作用 | 日常对话是否加载 |
+|---|---|---|
+| `README.md` | 导航入口和加载约定 | 是 |
+| `SKILL.md` | Brain 核心规范 | 是 |
+| `references/` | 按需加载的详细行为规范 | 仅当前任务需要时 |
+| `registry/` | Agent 与 Skill 能力目录 | 仅选择执行资源时 |
+| `adapters/` | 可选的平台部署说明 | 否 |
+| `tests/`、`tools/` | 回归测试、校验与打包 | 否 |
+
+### 技术边界
+
+- 单独提供 GitHub URL，**不能保证**所有模型都会自动访问仓库。
+- 能否读取并遵循外部规范，取决于当前 Chat Host 的能力、权限和网络策略。
+- 仓库内容不能覆盖宿主平台更高优先级的指令。
+- 无法读取时应明确说明，不能假装加载成功。
+- “用户提供了链接”不等于“Skill 已成功加载”。
+- 用户只发送仓库链接时，先确认能否读取 `README.md`；读到 `SKILL.md` 之前不宣称 `Loaded`，不能读取则说明限制。
+
+### 加载状态
+
+| 状态 | 含义 |
+|---|---|
+| Loaded | 已读取完整核心规范 `SKILL.md` |
+| Partial | 只读取了部分必要内容，例如只有 `README.md` |
+| Unavailable | 无法访问仓库或核心文件 |
+| Unknown | 无法确认读取结果 |
+
+状态只在当前对话内有效；跨会话不假定持续生效。
+
+### 首次加载后的行为
+
+- 保持普通聊天，不进入项目开发模式或 Agent 执行模式。
+- 不输出完整初始化报告，不复述全部功能，不介绍项目结构。
+- 不自动询问“要开发什么”，不默认启动某个项目，不自动生成 Task Brief。
+- 如果用户只发送了加载请求，用一句话确认即可，例如：`已读取 Tang-Personal-Brain v0.2.0，可以直接交流。`
+- 如果用户同时提出具体问题，直接回答问题，不先做初始化说明。
 
 ## 它解决什么问题
 
@@ -49,16 +126,24 @@
 | `references/context-evolution.md` | 三层上下文、记忆预算、反馈记录、自更新与回归 |
 | `registry/skills.md` | Skill Registry，含 `dual-repo-agent-handoff` v0.2.2 |
 | `registry/agents.md` | Agent Registry，记录能力与验证状态 |
-| `adapters/chatgpt.md` | ChatGPT 安装、验证、更新、限制 |
-| `adapters/codex.md` | Codex 安装、验证、更新、限制 |
-| `adapters/generic.md` | 其他 Agent 的通用适配与可移植核心段 |
-| `tests/scenarios.md` | 15 项行为场景、判定标准、静态检查清单 |
+| `adapters/generic.md` | 通用 Chat 加载、能力差异与离线备用方案 |
+| `adapters/chatgpt.md` | ChatGPT 原生 Skill 安装（可选） |
+| `adapters/codex.md` | Codex 本地技能安装（可选执行环境） |
+| `tests/scenarios.md` | 24 项行为场景、判定标准、静态检查清单 |
 | `tests/validate.py` | 可执行的静态校验器（含负向自测） |
 | `tests/RESULTS.md` | 本轮实际验证结果与限制 |
 | `tools/pack_skill.py` | 构建并校验可分发的 `skill.zip` |
 | `skill.zip` | 分发包，根目录为 `tang-personal-brain/` |
 
 ## 快速开始
+
+任意 AI Chat 的普通用法：
+
+1. 复制本页最顶部的启动提示词。
+2. 粘贴到 Chat Host。
+3. 直接开始对话，不需要安装。
+
+可选的本地校验与打包：
 
 ```bash
 # 静态校验（标准库，无第三方依赖）
@@ -71,13 +156,13 @@ python tests/validate.py --self-test
 python tools/pack_skill.py
 ```
 
-安装到各平台：
+原生 Skill 安装是可选方式，不是使用 Tang-Personal-Brain 的前提：
 
 - ChatGPT：见 [adapters/chatgpt.md](adapters/chatgpt.md)。
 - Codex：见 [adapters/codex.md](adapters/codex.md)。
 - 其他 Agent：见 [adapters/generic.md](adapters/generic.md)。
 
-安装后新开会话，询问 `$tang-personal-brain` 的 metadata version；能答出 `0.1.0` 才算加载成功。
+安装后新开会话，询问 `$tang-personal-brain` 的 metadata version；能答出 `0.2.0` 才算加载成功。
 
 ## 验证说明
 
@@ -85,7 +170,7 @@ python tools/pack_skill.py
 
 | 层级 | 内容 | 能证明什么 |
 |---|---|---|
-| 静态校验 | frontmatter、文件、链接、敏感信息、场景结构、分发包 | 结构和安全边界正确 |
+| 静态校验 | frontmatter、README 入口、文件、链接、敏感信息、场景结构、分发包 | 结构和安全边界正确 |
 | 人工测试 | 按场景逐条阅读输出并判定 | 特定回答符合规范 |
 | 行为运行 | 在真实会话中加载技能并执行场景 | 模型实际行为符合规范 |
 
@@ -103,7 +188,7 @@ python tools/pack_skill.py
 GitHub 推送不会让 ChatGPT、Codex 或其他宿主自动同步。更新步骤：
 
 1. 拉取新版本并重建 `skill.zip`。
-2. 按对应适配器替换已安装版本。
+2. 通用 Chat 直接使用新版 README 顶部提示词；原生 Skill 按对应适配器替换。
 3. 新开会话核验版本与一个代表性场景。
 4. 行为回归失败则回滚到上一版本。
 
