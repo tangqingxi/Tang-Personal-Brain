@@ -6,6 +6,7 @@
 - Removed the residual "brief only when the user asks to execute" sentence from Chat Host neutrality and the portable core; clarified that R0 work stays in Discussion/Draft-only.
 - Draft-only may leave the executor unassigned; it no longer blocks delivery on an Agent selection.
 - Added static check SC-25. Targeted S35/S36 regression and a real 10-turn persona session passed; full S01-S48 regression was not re-run for this patch.
+- Merged as a patch with the S01-S48 gap explicitly documented; no claim of full regression.
 
 ## 0.5.0 — 2026-11-05
 

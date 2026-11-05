@@ -1,6 +1,6 @@
 ﻿# 验证结果 — 2026-11-06
 
-当前版本：**0.5.1（候选，fix/nexus-v0.5.1）**。v0.1.0 至 v0.5.0 的记录见 Git 历史。
+当前版本：**0.5.1（patch，已合并 main）**。v0.1.0 至 v0.5.0 的记录见 Git 历史。
 
 ## 环境
 
@@ -35,7 +35,7 @@ python tests/validate.py
 | SC-11 | PASS | S01-S48 齐全，均含类型、输入、预期、判定 |
 | SC-12 | PASS | 代码块外无 TODO |
 | SC-13 | PASS | 100 个长段落，0 个跨文件重复 |
-| SC-14 | PASS | skill.zip 47,550 字节，14 个文件，内容一致且可复现 |
+| SC-14 | PASS | skill.zip 47,864 字节，14 个文件，内容一致且可复现 |
 | SC-15 | PASS | MIT LICENSE 与 README 一致 |
 | SC-16 | PASS | README 顶部提示词唯一且位置正确 |
 | SC-17 | PASS | 通用 Chat 加载约定完整 |
@@ -64,8 +64,8 @@ python tools/pack_skill.py --check
 ```
 
 - 14 个文件，根目录 `tang-personal-brain/`。
-- `skill.zip` 47,550 字节。
-- SHA256：`40ca501b2f9e051cdd1527bbcc2f5158ac67316777c6808d8c89ecd46a2b676c`
+- `skill.zip` 47,864 字节。
+- SHA256：`83d270789ba4991d2aa0fe2b95cf76ab24e399215a4c5486ba1baf8c6a515459`
 - `--verify-only` 与 `--check` 均通过，逐字节可复现。
 - 包含 `LICENSE`，不含 `tests/`、`tools/`、`.git`、`memory/`。
 
@@ -86,7 +86,7 @@ v0.5.1 是修复补丁，只改 Draft-only/Execution 规则与 portable core；�
 ## 5. 发布门禁
 
 - 静态、负向自测、分发包、Draft-only 修复与人格 10 轮：通过。
-- **S01-S48 全量回归：未完成。** 因此 0.5.1 只作为 `fix/nexus-v0.5.1` 候选，未合并到 `main`。
+- **S01-S48 全量回归：未完成。** 管理员明确接受以 patch 范围合并 `main`，该缺口在本文件与 CHANGELOG 中保留，不宣称全量通过。
 - 不把静态检查或 v0.5.0 结果当作全量行为通过。
 
 ## 6. 限制
