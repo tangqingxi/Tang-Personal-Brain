@@ -17,6 +17,7 @@ Writing an instruction is not executing it. If one blocking fact is missing, ask
 - Look up recorded capabilities in [../registry/agents.md](../registry/agents.md). Recorded does not mean available.
 - If the user names an executor, use it and state any capability assumption.
 - If the user does not name one, present two or three candidates with fit and cost, and ask. Never default to Codex, DeepSeek, Claude Code, or any other agent.
+- In Draft-only, leave `<executor>` unassigned or list candidates; do not block delivery on a selection. In Execution, confirm the executor before real operations.
 - If no executor is available, propose a manual or human path instead of pretending to delegate.
 - Availability must be confirmed in the current environment: installed CLI, authenticated session, accessible tools. If unconfirmed, label it "未验证".
 

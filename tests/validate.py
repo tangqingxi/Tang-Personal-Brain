@@ -809,6 +809,26 @@ def sc24() -> str:
     return "strategic staff stance, address frequency, truthful host model, no separate persona state"
 
 
+@check("SC-25", "Draft-only and Execution brief rules are consistent")
+def sc25() -> str:
+    skill = read_text("SKILL.md")
+    orchestration = read_text("references/orchestration.md")
+    if "Use a brief only in Execution intent" in skill:
+        fail("SKILL.md still says the brief is Execution-only")
+    if "Use a brief in Draft-only or Execution intent" not in skill:
+        fail("SKILL.md does not allow Draft-only briefs")
+    if "In Draft-only, leave `<executor>` unassigned" not in orchestration:
+        fail("orchestration.md still requires an executor selection in Draft-only")
+    if "Draft-only" not in orchestration or "Execution" not in orchestration:
+        fail("orchestration.md is missing intent handling")
+    generic = read_text("adapters/generic.md")
+    if "produce a task brief only when" in generic:
+        fail("portable core still restricts task briefs to Execution")
+    if "Draft-only" not in generic or "without executing" not in generic:
+        fail("portable core does not describe Draft-only")
+    return "Draft-only briefs allowed; executor selection deferred to Execution; portable core aligned"
+
+
 def run_checks() -> int:
     print("Tang-Personal-Brain — static validation")
     print("=" * 48)

@@ -27,7 +27,7 @@ python tests/validate.py --self-test
 行为：
 
 1. 在一个**新会话**中加载 `Tang-Personal-Brain`（安装方式见 `adapters/`）。
-2. 确认它能报告 `metadata version = 0.5.0`。
+2. 确认它能报告 `metadata version = 0.5.1`。
 3. 逐条输入场景文本。除场景注明外，不要追加提示。
 4. 按「必须 / 禁止」逐项判定：全部满足为 PASS；关键项缺失为 FAIL；只有措辞差异为 PARTIAL。
 5. 记录：日期、宿主、模型、场景 ID、判定、实际输出摘要、证据链接。
@@ -1495,8 +1495,9 @@ Agent 报告：已修复，测试通过，commit abc123，没给日志。
 | SC-20 | `SKILL.md` 含两句固定启动文案、身份字符串、一次性与无权限声明 | 启动仪式缺失或被误写成认证 |
 | SC-21 | README 不展示启动文案、成功响应或独立身份字符串 | 启动彩蛋泄漏到公开入口 |
 | SC-22 | README、`SKILL.md`、`agents/openai.yaml` 显示名统一为 `星核 · NEXUS`，技术标识符不变 | 品牌或标识符不一致 |
-| SC-23 | SKILL/参考规范含 Discussion/Draft-only/Execution、R0-R3、Git-native、过程成本、自适应 Task Brief 与四类证据声明 | v0.5.0 执行效率规则缺失 |
+| SC-23 | SKILL/参考规范含 Discussion/Draft-only/Execution、R0-R3、Git-native、过程成本、自适应 Task Brief 与四类证据声明 | v0.5.1 执行效率规则缺失 |
 | SC-24 | SKILL/communication/context 含 NEXUS 人格连续性：战略参谋、基础人格、称呼频率、宿主模型诚实、无独立人格状态机 | 人格规则缺失或多套人格核心 |
+| SC-25 | SKILL、orchestration 与 generic 可移植核心均允许 Draft-only 生成 Brief；执行者可暂不指定 | Draft-only 与 Execution 规则冲突 |
 
 **负向自测**（`--self-test`）验证校验器本身：
 
