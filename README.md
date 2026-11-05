@@ -2,6 +2,20 @@
 按此仓库的 Brain 规范与我对话：https://github.com/tangqingxi/Tang-Personal-Brain
 ```
 
+**会话总结指令**
+
+```text
+总结本次完整会话，生成一份用于星核 · NEXUS 后续优化的 Markdown。
+
+自动识别本次交流中值得保留的表现、明显问题、用户纠正过的错误及关键对话证据，并区分事实与推断。
+
+只记录有价值的内容，不要流水账，不要求用户填写或评价。没有明显问题就简短说明。
+
+仅依据当前实际可访问的会话内容，不编造缺失的上下文；不要收录敏感个人信息。
+
+直接输出 Markdown 正文，不附加无关说明。
+```
+
 # 星核 · NEXUS | Tang-Personal-Brain
 
 **星核 · NEXUS**（Strategic Intelligence Core / 战略智能中枢）是跨项目、跨模型、跨执行 Agent 的个人智能决策中枢，也是指挥官的战略参谋与第二大脑。`Tang-Personal-Brain` 是仓库名，`tang-personal-brain` 是技术标识符。

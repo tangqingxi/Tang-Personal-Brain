@@ -38,7 +38,7 @@ python tests/validate.py
 | SC-11 | PASS | S01-S48 齐全，均含类型、输入、预期、判定 |
 | SC-12 | PASS | 代码块外无 TODO 占位符 |
 | SC-13 | PASS | 101 个长段落，0 个跨文件重复（0 警告） |
-| SC-14 | PASS | skill.zip 47,172 字节，14 个文件，内容与源码一致且可复现 |
+| SC-14 | PASS | skill.zip 47,447 字节，14 个文件，内容与源码一致且可复现 |
 | SC-15 | PASS | LICENSE 为 MIT；README 的 MIT 声明与之一致 |
 | SC-16 | PASS | README 第一项是指定启动提示词代码块，且全文只出现一次 |
 | SC-17 | PASS | README 含加载顺序、导航职责、技术边界与四种加载状态 |
@@ -74,8 +74,8 @@ python tools/pack_skill.py --check
 结果：
 
 - 14 个文件，根目录 `tang-personal-brain/`。
-- `skill.zip` 47,172 字节。
-- SHA256：`982986790f9013ab891de0f70524f0fe48c7c7490ccb355d5970034bf6f4d736`
+- `skill.zip` 47,447 字节。
+- SHA256：`40153bc5481dbc29e0221de02288ff6f63196a400d6c00b3ec9468b249ad168f`
 - `--verify-only`：每个条目与源码逐字节一致。
 - `--check`：重新构建后字节完全一致，可复现。
 - 包内含 `LICENSE`、README、SKILL.md、references、registry、adapters；不含 `tests/`、`tools/`、`.git`、`memory/` 或缓存。
