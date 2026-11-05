@@ -12,7 +12,7 @@
 用户 ↔ Brain → 通用任务指令 → 执行 Agent → 执行证据 → Brain 审查
 ```
 
-当前版本：`0.3.0`（2026-11-05）。
+当前版本：`0.4.0`（2026-11-05）。
 
 ## 一键使用：任意 AI Chat
 
@@ -159,7 +159,7 @@ python tools/pack_skill.py
 - Codex：见 [adapters/codex.md](adapters/codex.md)。
 - 其他 Agent：见 [adapters/generic.md](adapters/generic.md)。
 
-安装后新开会话，询问 `$tang-personal-brain` 的 metadata version；能答出 `0.3.0` 才算加载成功。
+安装后新开会话，询问 `$tang-personal-brain` 的 metadata version；能答出 `0.4.0` 才算加载成功。
 
 ## 验证说明
 

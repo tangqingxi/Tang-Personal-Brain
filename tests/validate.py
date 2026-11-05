@@ -93,7 +93,7 @@ SCENARIO_TOKENS = {
     "S22": ["Task Brief"],
     "S23": ["Objective", "Stop Conditions"],
     "S24": ["交接"],
-    "S25": ["Brain Core 在线。等待指挥官身份确认。"],
+    "S25": ["星核 · NEXUS 在线。等待指挥官身份确认。"],
     "S26": ["身份确认。欢迎回来，指挥官。星核 · NEXUS 在线。"],
     "S27": ["未匹配"],
     "S28": ["不重复"],
@@ -105,7 +105,7 @@ SCENARIO_TOKENS = {
     "S34": ["Objective", "Stop Conditions"],
 }
 DISPLAY_NAME = "星核 · NEXUS"
-STARTUP_WAIT = "Brain Core 在线。等待指挥官身份确认。"
+STARTUP_WAIT = "星核 · NEXUS 在线。等待指挥官身份确认。"
 STARTUP_WELCOME = "身份确认。欢迎回来，指挥官。星核 · NEXUS 在线。"
 WARNINGS: list[str] = []
 TODO_MARKER = "[" + "TODO:"

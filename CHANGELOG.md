@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 — 2026-11-05
+
+- Changed the startup wait line from `Brain Core 在线。等待指挥官身份确认。` to `星核 · NEXUS 在线。等待指挥官身份确认。` The welcome line is unchanged.
+- Updated the S17/S25/S30 expectations, static checks, and verification record.
+- No change to other Brain behavior, schemas, or the MIT license.
+
 ## 0.3.0 — 2026-11-05
 
 - Set the Brain display identity to **星核 · NEXUS**; kept the repository name `Tang-Personal-Brain`, the skill identifier `tang-personal-brain`, and the GitHub URL unchanged.

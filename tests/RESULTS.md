@@ -1,6 +1,6 @@
-# 验证结果 — 2026-11-05
+﻿# 验证结果 — 2026-11-05
 
-当前版本：**0.3.0**。v0.1.0 / v0.2.0 的记录见 Git 历史；本文件记录星核 · NEXUS 命名、启动仪式与 MIT 许可证落地后的实际结果。
+当前版本：**0.4.0**。v0.1.0 至 v0.3.0 的记录见 Git 历史；本文件记录星核 · NEXUS 命名、启动仪式与 MIT 许可证落地后的实际结果。
 
 ## 环境
 
@@ -11,7 +11,7 @@
 | Git | 2.51.1.windows.1 |
 | GitHub CLI | 未安装；仓库操作使用已有凭据的 REST API 与 git |
 | 行为测试模型 | DeepSeek-V4.1-Flash，DSH 子会话，2026-11-05 |
-| 技能版本 | 0.3.0 |
+| 技能版本 | 0.4.0 |
 
 ## 1. 静态校验
 
@@ -25,7 +25,7 @@ python tests/validate.py
 
 | ID | 结果 | 实际观测 |
 |---|---|---|
-| SC-01 | PASS | `name=tang-personal-brain`，version 0.3.0，README 与 CHANGELOG 一致 |
+| SC-01 | PASS | `name=tang-personal-brain`，version 0.4.0，README 与 CHANGELOG 一致 |
 | SC-02 | PASS | SKILL.md 正文 198 行（上限 200） |
 | SC-03 | PASS | 19 个必需文件存在且达到最小体积 |
 | SC-04 | PASS | openai.yaml 字段齐全，short_description 54 字符 |
@@ -37,8 +37,8 @@ python tests/validate.py
 | SC-10 | PASS | 1 个 Skill 条目，5 个 Agent 条目，字段齐全 |
 | SC-11 | PASS | S01-S34 齐全，均含类型、输入、预期、判定 |
 | SC-12 | PASS | 代码块外无 TODO 占位符 |
-| SC-13 | PASS | 87 个长段落，0 个跨文件重复（0 警告） |
-| SC-14 | PASS | skill.zip 43,080 字节，14 个文件，内容与源码一致且可复现 |
+| SC-13 | PASS | 89 个长段落，0 个跨文件重复（0 警告） |
+| SC-14 | PASS | skill.zip 43,235 字节，14 个文件，内容与源码一致且可复现 |
 | SC-15 | PASS | LICENSE 为 MIT；README 的 MIT 声明与之一致 |
 | SC-16 | PASS | README 第一项是指定启动提示词代码块，且全文只出现一次 |
 | SC-17 | PASS | README 含加载顺序、导航职责、技术边界与四种加载状态 |
@@ -72,19 +72,19 @@ python tools/pack_skill.py --check
 结果：
 
 - 14 个文件，根目录 `tang-personal-brain/`。
-- `skill.zip` 43,080 字节。
-- SHA256：`da5d2202afd5981398a149a29f802e6eb30dac5d72cea1c542923d6d2ea67b04`
+- `skill.zip` 43,235 字节。
+- SHA256：`51eeff0dfce3b5fa9b61707372cc33e2a29e549bcdcb31617698cd3b5ded624c`
 - `--verify-only`：每个条目与源码逐字节一致。
 - `--check`：重新构建后字节完全一致，可复现。
 - 包内包含 `LICENSE`、README 顶部提示词、SKILL.md 启动规则；不含 `tests/`、`tools/`、`.git`、`memory/` 或缓存。
 
 ## 4. 启动仪式行为测试
 
-方法：新开独立 DSH 子会话，按普通 Chat Host 约束执行（只对话/读取，不写文件、不执行 git）。每个子会话读取 README 与 SKILL.md 后按场景作答，由本轮构建者按判定标准逐条判定。
+方法：新开独立 DSH 子会话，按普通 Chat Host 约束执行（只对话/读取，不写文件、不执行 git）。每个子会话读取 README 与 SKILL.md 后按场景作答，由本轮构建者按判定标准逐条判定。v0.4.0 只改了等待句；S25/S29/S32 在改后重新执行，S26-S28、S30-S31、S33-S34 不输出等待句，沿用同一轮启动测试的前一次结果。
 
 | 场景 | 结果 | 实际观测 |
 |---|---|---|
-| S25 首次加载 | PASS | 只输出 `Brain Core 在线。等待指挥官身份确认。`，未追加初始化报告 |
+| S25 首次加载 | PASS | 只输出 `星核 · NEXUS 在线。等待指挥官身份确认。`，未追加初始化报告 |
 | S26 回复正确身份 | PASS | 输出 `身份确认。欢迎回来，指挥官。星核 · NEXUS 在线。`，未追加身份追问 |
 | S27 错误身份 | PASS | 简短说明身份未匹配、可重试；未输出欢迎语，未锁功能 |
 | S28 已确认不重复 | PASS | 直接回答 CAP 问题，未重复等待/欢迎句，未使用“指挥官” |
@@ -101,7 +101,7 @@ python tools/pack_skill.py --check
 
 | 项目 | 状态 | 原因 |
 |---|---|---|
-| S01-S24 本版本复跑 | 未运行 | 本轮只验证新增启动场景；v0.2.0 的 S16-S24 结果不能直接算作 v0.3.0 通过 |
+| S01-S24 本版本复跑 | 未运行 | 本轮只验证新增启动场景；v0.2/v0.3 的 S16-S24 结果不能直接算作 v0.4.0 通过 |
 | 真实 GitHub URL 抓取 | 未验证 | 子会话读取的是本地仓库副本，不是真实网络访问 |
 | 真实 ChatGPT / Codex 安装 | 未验证 | 当前环境没有对应客户端与入口 |
 | 跨模型稳定性 | 未验证 | 只运行了 DeepSeek-V4.1-Flash 一个模型 |

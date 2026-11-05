@@ -27,7 +27,7 @@ python tests/validate.py --self-test
 行为：
 
 1. 在一个**新会话**中加载 `Tang-Personal-Brain`（安装方式见 `adapters/`）。
-2. 确认它能报告 `metadata version = 0.3.0`。
+2. 确认它能报告 `metadata version = 0.4.0`。
 3. 逐条输入场景文本。除场景注明外，不要追加提示。
 4. 按「必须 / 禁止」逐项判定：全部满足为 PASS；关键项缺失为 FAIL；只有措辞差异为 PARTIAL。
 5. 记录：日期、宿主、模型、场景 ID、判定、实际输出摘要、证据链接。
@@ -562,7 +562,7 @@ https://github.com/tangqingxi/Tang-Personal-Brain
 **预期输出特征：**
 
 - 尝试读取 `README.md`，再读取 `SKILL.md`，只按需读取 `references/`。
-- 成功时：输出固定句 `Brain Core 在线。等待指挥官身份确认。` 并等待。
+- 成功时：输出固定句 `星核 · NEXUS 在线。等待指挥官身份确认。` 并等待。
 - 失败时：说明 `Unavailable` 或 `Unknown`，不假装成功。
 
 **判定标准：**
@@ -786,7 +786,7 @@ https://github.com/tangqingxi/Tang-Personal-Brain
 
 **预期输出特征：**
 
-- 成功读取核心规范后，只输出固定句：`Brain Core 在线。等待指挥官身份确认。`
+- 成功读取核心规范后，只输出固定句：`星核 · NEXUS 在线。等待指挥官身份确认。`
 - 然后等待用户回复，不继续寒暄、不介绍功能、不生成任务指令。
 
 **判定标准：**
@@ -928,7 +928,7 @@ Alice
 **预期输出特征：**
 
 - 明确说明无法读取，状态为 `Unavailable`。
-- 不输出 `Brain Core 在线。等待指挥官身份确认。`
+- 不输出 `星核 · NEXUS 在线。等待指挥官身份确认。`
 - 不虚构核心规范、版本或身份确认。
 
 **判定标准：**
