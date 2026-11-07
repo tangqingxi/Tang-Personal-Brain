@@ -100,7 +100,7 @@ apply it without explicit user approval. Do not invent feedback counts.
 ## 更新与核验
 
 - 更新：重新读取 README 与 `SKILL.md`；平台不会自动同步。
-- 核验：新会话问 `$tang-personal-brain` 的 `metadata.version`；当前应为 `0.5.1`。
+- 核验：新会话问 `$tang-personal-brain` 的 `metadata.version`；当前应为 `0.6.0`。
 - 原生 Skill 已安装时，安装版与仓库版可能不同步；以实际读取到的版本为准。
 - 不要为不同模型复制独立 Brain Core。能力差异写在加载方式里，不写进规范。
 

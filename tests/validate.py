@@ -117,6 +117,11 @@ SCENARIO_TOKENS = {
     "S46": ["报告"],
     "S47": ["错误"],
     "S48": ["模型"],
+    "S49": ["Project-Orientation"],
+    "S50": ["计划状态"],
+    "S51": ["claimed", "verified"],
+    "S52": ["冻结"],
+    "S53": ["preflight"],
 }
 DISPLAY_NAME = "星核 · NEXUS"
 STARTUP_WAIT = "星核 · NEXUS 在线。等待指挥官身份确认。"
@@ -526,11 +531,11 @@ def sc10() -> str:
     return f"1 skill entry, {len(agent_entries)} agent entries"
 
 
-@check("SC-11", "48 behavioural scenarios with required parts")
+@check("SC-11", "53 behavioural scenarios with required parts")
 def sc11() -> str:
     text = read_text("tests/scenarios.md")
     matches = list(re.finditer(r"^## (S\d{2}) — (.+)$", text, re.MULTILINE))
-    expected = [f"S{index:02d}" for index in range(1, 49)]
+    expected = [f"S{index:02d}" for index in range(1, 54)]
     found = [match.group(1) for match in matches]
     if found != expected:
         fail(f"scenario IDs are {found}; expected {expected}")
@@ -543,7 +548,7 @@ def sc11() -> str:
         missing = [token for token in SCENARIO_TOKENS[match.group(1)] if token not in block]
         if missing:
             fail(f"{match.group(1)} is missing coverage token(s): {', '.join(missing)}")
-    return "S01-S48 with type/input/expected/criteria"
+    return "S01-S53 with type/input/expected/criteria"
 
 
 @check("SC-12", "no unfinished TODO placeholders")
@@ -827,6 +832,50 @@ def sc25() -> str:
     if "Draft-only" not in generic or "without executing" not in generic:
         fail("portable core does not describe Draft-only")
     return "Draft-only briefs allowed; executor selection deferred to Execution; portable core aligned"
+
+
+@check("SC-26", "v0.6 orientation, granularity, evidence grade, actual state and semantic naming")
+def sc26() -> str:
+    skill = read_text("SKILL.md")
+    orchestration = read_text("references/orchestration.md")
+    decision = read_text("references/decision-governance.md")
+    communication = read_text("references/communication.md")
+    required = {
+        "orchestration.md Project-Orientation": "Project-Orientation" in orchestration,
+        "orchestration.md one problem per brief": "One problem per brief" in orchestration,
+        "orchestration.md standalone first brief": "must stand alone" in orchestration,
+        "decision-governance.md PASS_WITH_LIMITATIONS": "PASS_WITH_LIMITATIONS" in decision,
+        "decision-governance.md claimed/verified": "`claimed`" in decision and "`verified`" in decision,
+        "decision-governance.md actual project state": "Planned state" in decision,
+        "SKILL.md semantic phase naming": "ODE45-Integration" in skill,
+        "SKILL.md no second handoff format": "second handoff format" in skill,
+        "communication.md evidence level tag": "Agent 自述" in communication,
+        "communication.md escalation threshold": "architecture boundary" in communication,
+    }
+    missing = [name for name, present in required.items() if not present]
+    if missing:
+        fail("v0.6 rules missing: " + ", ".join(missing))
+    return "orientation, granularity, evidence grade, actual-state-first and semantic naming present"
+
+
+@check("SC-27", "v0.6.0 release fixes: provisional budget, observed/reported counts, S08 premise")
+def sc27() -> str:
+    decision = read_text("references/decision-governance.md")
+    context = read_text("references/context-evolution.md")
+    scenarios = read_text("tests/scenarios.md")
+    s08 = scenarios.split("## S08 —", 1)[-1].split("## S09 —", 1)[0] if "## S08 —" in scenarios else ""
+    s12 = scenarios.split("## S12 —", 1)[-1].split("## S13 —", 1)[0] if "## S12 —" in scenarios else ""
+    required = {
+        "decision-governance provisional budget": "provisional budget" in decision,
+        "decision-governance owner and cadence": "review cadence" in decision,
+        "context-evolution observed/reported split": "本次观察到" in context,
+        "S08 task premise": "待执行任务" in s08,
+        "S12 supplementary check": "补充检查" in s12,
+    }
+    missing = [name for name, present in required.items() if not present]
+    if missing:
+        fail("v0.6.0 release fixes missing: " + ", ".join(missing))
+    return "provisional budget, owner/cadence, count separation and S08/S12 premises present"
 
 
 def run_checks() -> int:

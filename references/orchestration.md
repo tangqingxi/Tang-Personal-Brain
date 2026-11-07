@@ -10,13 +10,14 @@ Classify the request before acting:
 - **Draft-only** — write a prompt, task brief, or execution plan. Deliver copyable text; read-only checks are allowed; do not edit repositories, create branches, commit, or start execution.
 - **Execution** — only after explicit authorization to act. Respect the Chat Host's permissions and the risk gate in [decision-governance.md](decision-governance.md).
 
-Writing an instruction is not executing it. If one blocking fact is missing, ask only that question; do not run a full requirements interview.
+Writing an instruction is not executing it. If one blocking fact is missing, ask only that question; do not run a full requirements interview. When the user asks for execution this host cannot perform, deliver the platform-neutral brief anyway and say what the user must do with it; do not withhold the artifact pending a choice of executor or permission.
 
 ## 2. Choosing an executor
 
 - Look up recorded capabilities in [../registry/agents.md](../registry/agents.md). Recorded does not mean available.
 - If the user names an executor, use it and state any capability assumption.
 - If the user does not name one, present two or three candidates with fit and cost, and ask. Never default to Codex, DeepSeek, Claude Code, or any other agent.
+- Not being able to dispatch from this host is not a reason to skip the comparison: name the candidates, mark availability "未验证", say what the user must confirm, and hand over a read-only preflight only after the choice.
 - In Draft-only, leave `<executor>` unassigned or list candidates; do not block delivery on a selection. In Execution, confirm the executor before real operations.
 - If no executor is available, propose a manual or human path instead of pretending to delegate.
 - Availability must be confirmed in the current environment: installed CLI, authenticated session, accessible tools. If unconfirmed, label it "未验证".
@@ -67,6 +68,8 @@ Omit generic advice such as "read the code first".>
 Rules:
 
 - **Adaptive length.** Small task: Objective, Scope, Constraints, Acceptance, Deliverables. Long task: add Context, baseline, Procedure, stage gates, autonomy and stop conditions. Include the full nine sections when the task is broad.
+- **One problem per brief.** Context building, design judgment, coding and acceptance do not share a brief, and never share a first one. A brief may be long; its scope stays narrow. Do not trade verifiability for fewer turns.
+- **First round is read-only.** A brief to an agent whose context is unverified is a Project-Orientation task: read the architecture documents, check the project's actual state, confirm the environment and whether the handoff material is usable. Do not mix in repository creation, coding, testing or handoff.
 - Keep each section to the minimum that prevents a wrong execution. A brief is not a design document.
 - Do not repeat common knowledge, project `AGENTS.md` rules, or another skill's full specification. Verify paths, versions and source identity instead.
 - Acceptance criteria are commands, files, behaviors, or metrics — not adjectives.
@@ -139,6 +142,10 @@ Ready: yes | no — <reason>
 ```
 
 The Brain reviews this against the project record and marks `verified`, `failed`, or `unknown`. Git checks, repository protection and the detailed handoff workflow remain the responsibility of the applicable execution skill (currently `dual-repo-agent-handoff`); the Brain does not replace them.
+
+For a new agent the first round is orientation only: the five fields above, read-only, no writes. Until the preflight passes — goal restated correctly, revision known, authorization scope clear — issue no write brief and grant no Execution intent. A failed preflight gets the failed field returned, not a revised brief.
+
+A first brief must stand alone: no implied chat history, prior project background, or another agent's memory. Project knowledge comes only from the repository's architecture documents, handoff material and project state record. If the brief does not make sense without this conversation, rewrite it.
 
 Handoff material at minimum: task ID, goal, accepted versus remaining work, base revision, files touched, commands run, open risks, next action, and references. It must let a new executor resume without this chat.
 

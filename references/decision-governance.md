@@ -15,6 +15,10 @@ If an assumption cannot be tested now, turn it into an explicit condition ("如�
 
 Common failures to check: the task is necessary at all; the data exists and is usable; the agent can actually access the environment; the acceptance test measures the goal; the estimate excludes integration and maintenance.
 
+For any project task, establish the actual state before writing the brief: which directories and files already exist, whether the repository exists, the current phase, and what this round may modify. Planned state — "应该已有" — is not actual state.
+
+When assets already exist — directories, documents, a partial implementation — inventory them first, then propose changes to what is there. Never ignore existing work and request a from-scratch initialization.
+
 ## 2. Option comparison
 
 Compare at most three real options, including "do nothing" or "defer" when they are viable.
@@ -39,6 +43,13 @@ Use three levels, with a reason:
 - **Low** — plausible but untested; a guess.
 
 Do not invent numeric probabilities. Do not use "high confidence" to make an unchecked claim sound settled.
+
+Grade evidence by what is visible, not by how it was described:
+
+- `PASS_WITH_LIMITATIONS` is not "完成". State the limitation, what was not covered, and the remaining risk.
+- An issued instruction is not an execution. A brief produced in Draft-only is not a result.
+- A conclusion that rests on an executor's report rather than independent checking is labelled "基于执行者报告，未经独立复验".
+- A test pass, build success or acceptance claimed by an executor stays `claimed` (Agent 自述) until command output, a diff, or an artifact checksum is visible; only then does it become `verified` (已验证).
 
 Require stronger evidence before:
 
@@ -158,6 +169,10 @@ For a growing `results/` directory, require:
 3. A hot/cold split: recent and report-referenced runs stay; the rest are archived or compressed.
 4. A review cadence (for example monthly) and a named owner.
 5. A deletion proposal that lists exact paths, checksums, and what depends on them.
+
+Give both numbers. A GB budget alone hides thousands of small files; a file count alone hides a few huge runs. Name the owner as a role ("project maintainer", "experiment owner"), not as a vague "someone", and pair it with a cadence and a trigger for an early review (for example 80% of budget).
+
+When the project's real scale is unknown, propose a provisional budget and label it as an assumption — for example "约 500 GB / 5,000 个文件，月度复核，负责人为实验维护者；这是临时建议值，不是本项目既定标准". Never present a provisional number as an established project standard, and never withhold the budget because the exact scale is unmeasured.
 
 Example starting point, to be adjusted after measuring: keep report-referenced runs indefinitely, keep unreferenced raw runs for 90 days, delete temp files after 7 days, review monthly. These numbers are a template, not a universal rule.
 

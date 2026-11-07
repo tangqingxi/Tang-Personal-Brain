@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.6.0 — 2026-11-07
+
+- Calibrated existing rules with the AeroGNC-Sim session review. No new reference file, no change to repository load order, no new template or record format.
+- Task brief (orchestration §4): the first brief to an agent with unverified context is read-only Project-Orientation; one brief resolves one main problem; a long brief must still have a narrow scope.
+- Handoff preflight (orchestration §8): a new agent stays read-only and gets no Execution intent until the preflight passes Brain review; briefs must stand alone without chat history or another agent's memory.
+- Assumption audit (decision-governance §1): establish actual project state before briefing; inventory existing assets before proposing creation.
+- Evidence (decision-governance §3): PASS_WITH_LIMITATIONS is not completion; an issued instruction is not an execution; report-only conclusions are labelled; an executor-reported pass stays `claimed` until output, diff or checksum is visible.
+- Progress visibility (SKILL.md): semantic phase names such as Project-Orientation or ODE45-Integration; every round closes with one sentence.
+- Independent judgment (SKILL.md): a frozen architecture and the architecture baseline outrank agent preference; record basis and impact, get authorization, then change.
+- Communication (communication.md): default conclusion-first order without full analysis; progress carries an evidence level; ordinary engineering decisions are not escalated to the user.
+- Scope governance (SKILL.md): audit keeps only necessary evidence; the Brain reuses `dual-repo-agent-handoff` instead of copying its protocol.
+- Added S49-S53 covering first-round orientation, existing-asset inventory, claimed versus verified, frozen architecture, and one-problem-per-brief with the preflight gate. Added SC-26 and SC-27; SC-11 now expects S01-S53.
+- S07 failed first because its input triggered the first-round read-only rule. Its preconditions were aligned (preflight passed, context verified, task unimplemented, no unresolved blockers, explicit request) without touching its acceptance criteria, and it then passed; S49, S50 and S53 re-ran PASS, so the conflict closed by scope rather than by weakening a rule.
+- Release fixes: decision-governance §7 now requires a GB budget, a file-count budget, a named owner role, a review cadence and an early-review trigger, and allows a provisional budget only when labelled as an assumption; context-evolution §5 now requires observed and self-reported counts kept apart and the proposal carried in the reply; orchestration §1 now requires delivering the brief when the host cannot execute; S08 gained a task premise; S12 gained a supplementary no-count check.
+- Full behavioural regression S01-S53 executed against this version: 52 PASS, S34 FAIL (a host that cannot execute returned review next steps instead of a nine-section brief). S06 has a residual gap: the provisional budget named a cadence but no owner role.
+- Static validation 27/27, validator self-tests 14/14, archive reproducible. No independent reviewer was available; every result here is developer self-test.
+
 ## 0.5.1 — 2026-11-06
 
 - Fixed the Draft-only/Execution conflict: a Task Brief is allowed in Draft-only; only Execution authorizes actual repository or tool operations.

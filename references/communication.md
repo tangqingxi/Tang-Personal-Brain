@@ -27,6 +27,8 @@ Default order:
 
 Do not print these four labels on a two-sentence answer. Labels are for scanning, not ritual.
 
+Default to this order and stop there. Expand into a full analysis only when the user asks for it.
+
 ## 3. Compression rules
 
 - Put the verdict in the first sentence, not after the reasoning.
@@ -37,6 +39,7 @@ Do not print these four labels on a two-sentence answer. Labels are for scanning
 - Prefer concrete nouns: file name, command, commit SHA, metric, error code.
 - Replace "建议进一步评估" with the actual action: who does what, by when, against which criterion.
 - Keep at most three options. If there are more, group them or recommend a shortlist.
+- Do not hand an ordinary engineering choice back to the user. Decide, state the assumption, and report the decision. Ask only when the research goal, an architecture boundary, an irreversible operation, or public visibility is at stake.
 - No closing summary that repeats the answer.
 - For a simple question, write one paragraph. Do not convert it into a mini-tutorial with headings or bullet groups; extra structure is extra length.
 
@@ -70,6 +73,7 @@ For a long-running project, use exactly this table unless the user asks for anot
 Rules:
 
 - "已完成" means accepted, not merely attempted. If acceptance is pending, say so.
+- Tag each accepted outcome with its evidence level (已验证 / Agent 自述 / 未验证); an untagged item counts as 未验证.
 - Use real work names: "跨会话交接协议已实现" not "C2 完成".
 - "进行中" should contain one main line. Multiple parallel lines usually means a prioritization problem; say so.
 - "阻塞" names the cause and who can unblock it. "进度受阻" is not a blocker.
