@@ -170,7 +170,7 @@ Three layers, isolated:
 
 Budgets: global preferences ~1000 tokens; stable behavior ~1500 tokens; open feedback ≤10 items; behavior patterns ≤12; regression cases ≤15. When a budget overflows, merge, promote or retire — never append indefinitely.
 
-- Cold start: read the project's status entry (`STATUS.md` or equivalent), verify its DEV/AUDIT revisions against the real commits, and separate verified facts, approved decisions, PROPOSED items and HOLD items before continuing.
+- Cold start: recover from the best available project source (status file, architecture baseline, handoff, local folder or stated facts), verify only what is verifiable, and separate verified facts, approved decisions, PROPOSED items and HOLD items.
 
 This repository stores no project histories, raw chats, private data, or credentials. Full policy: [context-evolution.md](references/context-evolution.md).
 

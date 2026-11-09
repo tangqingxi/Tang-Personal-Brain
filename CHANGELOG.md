@@ -4,12 +4,12 @@
 
 - Architecture supervision added to decision-governance: replacement review (§6) with REMOVE / REPLACE / KEEP / REVIEW, product scope protection, legacy and version governance, and four acceptance dimensions in §8 (function, architecture, technical debt, governance).
 - Verdict vocabulary unified: ACCEPT / HOLD / REJECT. HOLD replaces CONDITIONAL when evidence is missing and work is paused.
-- Cold start added: context-evolution §14 defines the status-entry principles (`STATUS.md` recommended, not mandatory) and project/Brain independence; orchestration §14 gives the seven-step procedure, including DEV/AUDIT SHA verification and the PROPOSED / HOLD split.
+- Cold start defined once, without assuming a project layout: orchestration §14 holds the executable steps; context-evolution §14 holds the source authority order and conflict rules. `STATUS.md`, DEV/AUDIT and Git SHAs are optional evidence forms, not requirements. Cold start works for one repository, several repositories, a local folder, documents, or conversation-only facts, and never blocks ordinary discussion.
+- Replacement review now allows REVIEW (plus a request for diff and migration evidence) when only an agent claim exists; classification is required only when evidence supports it, so no deletion conclusion is invented to satisfy a label.
 - SKILL.md strengthened in Independent judgment and Context and memory; body stays at the 200-line limit.
-- Added S54-S63 and static check SC-28; SC-11 now expects S01-S63; scenario count updated in README and scenarios header.
-- Regression for this version: S54-S63 plus S13 executed — 10 PASS, S58 FAIL (replacement review substance correct, but the REMOVE / REPLACE / KEEP / REVIEW labels were not used).
-- S01-S53 were not re-run for 0.7.0; their v0.6.0 results remain the last evidence for those scenarios.
-- Carried limitations, unchanged: S34 FAIL (no brief when the host cannot execute), S06 residual (provisional budget without a named owner role), and all results remain developer self-test.
+- Added S54-S66 and static check SC-28; SC-11 now expects S01-S66. Scenario names, fixtures and repositories are generic; the normal-recovery and conflict scenarios are separate.
+- Full regression S01-S66 executed for this version: 62 PASS, S34 FAIL, S40/S42/S45 NOT RUN. S34 still returns review next steps instead of a nine-section brief when the host cannot execute; S42 completed 2 of 10 turns before being stopped.
+- Static validation 28/28 and validator self-tests 14/14 passed; archive reproducible. All results remain developer self-test, not independent review.
 
 ## 0.6.0 — 2026-11-07
 

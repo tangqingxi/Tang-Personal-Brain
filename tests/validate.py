@@ -123,15 +123,18 @@ SCENARIO_TOKENS = {
     "S52": ["冻结"],
     "S53": ["preflight"],
     "S54": ["STATUS.md"],
-    "S55": ["SHA"],
-    "S56": ["未知"],
-    "S57": ["PROPOSED"],
-    "S58": ["REMOVE"],
-    "S59": ["范围"],
-    "S60": ["接口"],
-    "S61": ["HOLD"],
-    "S62": ["全局"],
-    "S63": ["讨论"],
+    "S55": ["多个仓库"],
+    "S56": ["没有 Git"],
+    "S57": ["回退"],
+    "S58": ["冲突"],
+    "S59": ["Unavailable"],
+    "S60": ["PROPOSED"],
+    "S61": ["REVIEW"],
+    "S62": ["范围"],
+    "S63": ["接口"],
+    "S64": ["HOLD"],
+    "S65": ["全局"],
+    "S66": ["讨论"],
 }
 DISPLAY_NAME = "星核 · NEXUS"
 STARTUP_WAIT = "星核 · NEXUS 在线。等待指挥官身份确认。"
@@ -541,11 +544,11 @@ def sc10() -> str:
     return f"1 skill entry, {len(agent_entries)} agent entries"
 
 
-@check("SC-11", "63 behavioural scenarios with required parts")
+@check("SC-11", "66 behavioural scenarios with required parts")
 def sc11() -> str:
     text = read_text("tests/scenarios.md")
     matches = list(re.finditer(r"^## (S\d{2}) — (.+)$", text, re.MULTILINE))
-    expected = [f"S{index:02d}" for index in range(1, 64)]
+    expected = [f"S{index:02d}" for index in range(1, 67)]
     found = [match.group(1) for match in matches]
     if found != expected:
         fail(f"scenario IDs are {found}; expected {expected}")
@@ -558,7 +561,7 @@ def sc11() -> str:
         missing = [token for token in SCENARIO_TOKENS[match.group(1)] if token not in block]
         if missing:
             fail(f"{match.group(1)} is missing coverage token(s): {', '.join(missing)}")
-    return "S01-S63 with type/input/expected/criteria"
+    return "S01-S66 with type/input/expected/criteria"
 
 
 @check("SC-12", "no unfinished TODO placeholders")

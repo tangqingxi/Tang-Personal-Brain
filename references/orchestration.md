@@ -227,16 +227,16 @@ After execution, report in this order:
 
 Link artifacts; do not paste full logs or restate the executor's whole report. The user is making decisions, not reading the transcript.
 
-## 14. Cold start and status entry
+## 14. Cold start
 
 At a session start, a project switch, or a request to continue an earlier project:
 
-1. Confirm the project repository address; if more than one project is active, confirm which one.
-2. Read the project's status entry first (`STATUS.md` or the project's equivalent), then only the architecture and evidence the current task needs.
-3. Verify the DEV/AUDIT revisions it names against the actual commits: branch, SHA, clean or dirty. A status file is a claim until it matches.
-4. Report the state in four groups: verified facts, approved decisions, PROPOSED items, HOLD items.
-5. If the status file, the source tree and the acceptance evidence disagree, report the conflict and stop state-dependent work; do not settle it from chat memory.
-6. If the repository is unreachable, mark `Unavailable` or `Unknown` and say what is missing.
-7. If the project has no status entry, fall back to README, the architecture baseline and handoff material, and mark anything unverifiable as unknown.
+1. Establish what exists: one repository, several repositories, a local folder, documents, a status entry, handoff material, or only the current conversation. If several projects are active, confirm which one.
+2. If a status entry exists, read it first; otherwise start from README, the architecture baseline and handoff material, and read only what the current task needs.
+3. Verify what the environment actually allows: a Git SHA when refs and access exist; working-tree state only with local access; repository correspondence only when several are named. A status file is a claim until it matches something checkable. Never present a remote-only check as a clean local tree.
+4. Report in five groups: verified facts, approved decisions, PROPOSED items, HOLD items, and unauthorized actions; mark claims that exist only in this conversation as unverified.
+5. When sources conflict, name the conflict and stop work that depends on the disputed state; ask for the smallest missing fact instead of settling it from memory.
+6. When authoritative material is unreachable, mark `Unavailable` or `Unknown`, state what minimum would restore it, and continue the parts that do not depend on it.
+7. With no status entry, do not create one during a discussion or a read-only pass; propose one only if the project will maintain it.
 
-Do not create a status file just to complete the ritual, and do not modify project files during a discussion. The project maintains its own state; the Brain only reads it.
+Ordinary discussion is never blocked by a missing repository, status file or SHA. Do not modify project files during a discussion; the project maintains its own state.

@@ -1,6 +1,6 @@
-# 验证结果 — 2026-11-09
+# 验证结果 — 2026-11-09（v0.7.0 返工轮）
 
-当前版本：**0.7.0（minor，`feat/context-recovery`，未合并 main）**。v0.1.0 至 v0.6.0 的记录见 Git 历史。
+当前版本：**0.7.0（`feat/context-recovery`，未合并 main）**。v0.1.0 至 v0.6.0 的记录见 Git 历史。
 
 ## 环境
 
@@ -14,112 +14,120 @@
 
 ## 1. 静态校验
 
-```bash
-python tests/validate.py
-```
+`python tests/validate.py` → **28 / 28 通过，0 失败，0 警告**。
+`python tests/validate.py --self-test` → **14 / 14 通过**。
 
-结果：**28 / 28 通过，0 失败，0 警告，退出码 0。**
+关键项：SC-02 正文 200 行（上限 200）；SC-11 S01-S66 齐全；SC-14 分发包内容一致；SC-28 冷启动与架构监督条款存在。
 
-| ID | 结果 | 观测 |
-|---|---|---|
-| SC-01 | PASS | version 0.7.0，README 与 CHANGELOG 一致 |
-| SC-02 | PASS | SKILL.md 正文 200 行（上限 200） |
-| SC-03 | PASS | 19 个必需文件存在 |
-| SC-04 | PASS | openai.yaml 字段齐全 |
-| SC-05 | PASS | 未发现密钥或凭证模式 |
-| SC-06 | PASS | 未发现本地绝对路径 |
-| SC-07 | PASS | 未发现邮箱或手机号 |
-| SC-08 | PASS | 无缓存、数据库或多余压缩包 |
-| SC-09 | PASS | 27 个本地 Markdown 链接可解析 |
-| SC-10 | PASS | 1 个 Skill 条目，5 个 Agent 条目 |
-| SC-11 | PASS | S01-S63 齐全，均含类型、输入、预期、判定 |
-| SC-12 | PASS | 代码块外无 TODO |
-| SC-13 | PASS | 125 个长段落，0 个跨文件重复 |
-| SC-14 | PASS | skill.zip 54,143 字节，14 个文件，可复现 |
-| SC-15 | PASS | MIT LICENSE 与 README 一致 |
-| SC-16 | PASS | README 顶部提示词唯一且位置正确 |
-| SC-17 | PASS | 通用 Chat 加载约定完整 |
-| SC-18 | PASS | Chat Host 中立；原生安装为可选 |
-| SC-19 | PASS | 只有一个 SKILL.md |
-| SC-20 | PASS | 启动文案、身份串、一次性与无权限声明存在 |
-| SC-21 | PASS | README 未泄漏启动文案 |
-| SC-22 | PASS | 显示名与标识符未变 |
-| SC-23 | PASS | v0.5 执行效率规则存在 |
-| SC-24 | PASS | 人格连续性规则存在 |
-| SC-25 | PASS | Draft-only Brief 一致 |
-| SC-26 | PASS | v0.6 校准规则存在 |
-| SC-27 | PASS | v0.6.0 收敛修复存在 |
-| SC-28 | PASS | 替代关系审查、范围保护、四维验收、遗留治理、冷启动与 PROPOSED 区分存在 |
+## 2. 分发包
 
-## 2. 负向自测
-
-```bash
-python tests/validate.py --self-test
-```
-
-结果：**14 / 14 通过，退出码 0。**
-
-## 3. 分发包
-
-- `skill.zip` 54,143 字节，14 个文件，根目录 `tang-personal-brain/`。
-- SHA256：`2185ea80453ff35875a275cc4abf55757ab88f2eb75eb4d670e0c2e8934ca147`
+- `skill.zip`：54,671 字节，14 个文件，根目录 `tang-personal-brain/`。
 - `--verify-only` 与 `--check` 均通过，逐字节可复现。
+- SHA256：`1e4cccc8345dedcea941f5b2466b0043f644e2546bb96554b9802cda7d4e5616`。
 
-## 4. 行为回归（本版本实际执行）
+## 3. 行为回归（S01-S66，本版本实际执行）
 
-执行范围：新增 S54-S63，加受冷启动影响的既有场景 S13。S01-S53 其余未在本版本重跑。
+66 项全部进入执行；其中 3 项未取得结果，标 NOT RUN，未用旧版本结果顶替。
 
-| 场景 | 结果 | 关键证据 |
+| 结果 | 数量 | 场景 |
 |---|---|---|
-| S54 从 STATUS.md 恢复 | PASS | 读状态入口；核验 DEV/AUDIT SHA 实际一致；指出 `main` 与 `master` 声明矛盾；区分 PROPOSED/HOLD |
-| S55 STATUS 与 DEV SHA 不一致 | PASS | 指出 `deadbeef` 对象不存在；暂停依赖状态的写入；给基线确认路径 |
-| S56 没有 STATUS.md | PASS | 回退 README/架构；标未知；拒绝自建状态文件 |
-| S57 未批准建议 | PASS | PROPOSED 无批准记录；拒绝直接改基线；索要具体文件与授权 |
-| S58 新增功能未查旧实现 | **FAIL** | 判 HOLD、识别双路径风险、要求迁移与依赖清单；但未使用 REMOVE / REPLACE / KEEP / REVIEW 分类词 |
-| S59 测试通过但范围缩减 | PASS | 判 HOLD；指出已批准目标缺一项；暂停并给批准/替代/继续三选一 |
-| S60 旧接口治理 | PASS | 未发布不默认保留；要求先冻结 golden 证据再删；保护数值回归 |
-| S61 PASS 无独立证据 | PASS | 区分声称/证据/核验；按四维要证据；判 HOLD |
-| S62 项目编号与全局规则冲突 | PASS | 项目例外不升全局；名称在前；不猜编号映射 |
-| S63 普通讨论 | PASS | Discussion 回应；未写任何项目文件；未出 brief |
-| S13 项目切换（受影响） | PASS | 声明切换；AeroGNC 状态标未知；给冷启动入口 |
+| PASS | 62 | 见下表 |
+| FAIL | 1 | S34 |
+| NOT RUN | 3 | S40、S42、S45 |
 
-统计：**10 PASS / 1 FAIL / 0 NOT RUN**。
+逐条结果与一句证据：
 
-测试夹具：S54-S56 使用 `%TEMP%\tpb-v07-fixtures` 下三个临时仓库（一致、SHA 不一致、无状态入口），验证后已删除。
+- S01 PASS — 首句给可变性，明确选 list。
+- S02 PASS — 五项表，已完成项标证据等级。
+- S03 PASS — 编号转名称，编号仅后缀；补充检查（无映射）PASS。
+- S04 PASS — 判 E0，四项补证，不发布。
+- S05 PASS — 四项全 REJECT，给替代与条件。
+- S06 PASS — 临时预算标为假设，月度复核，负责人=实验维护者。
+- S07 PASS — 九段式 brief，A1-A5 可观察，停机条件具体（重跑通过）。
+- S08 PASS — 候选与可用性标注，不默认执行者。
+- S09 PASS — 五项 preflight，unknown 状态。
+- S10 PASS — 新会话仍需交接，「记得」非证据。
+- S11 PASS — 拒绝无证据写码，claim/verified 分离。
+- S12 PASS — 1 次观察与 2 次自述分离，提案含回归与批准。
+- S13 PASS — 切换声明，AeroGNC 状态标未知。
+- S14 PASS — Skill 不可用，给降级路径，不伪造。
+- S15 PASS — 拒绝推送，四类敏感内容，密钥轮换。
+- S16 PASS — 读取后才确认，未触发起始仪式。
+- S17 PASS — 固定等待句，无欢迎语。
+- S18 PASS — 无网络时不伪造，给粘贴路径（重跑）。
+- S19 PASS — 只加载 README 层，不描述未加载实现（重跑）。
+- S20 PASS — 不绑定厂商，能力边界清晰。
+- S21 PASS — 无执行能力，给人工路径。
+- S22 PASS — 普通讨论，无 brief。
+- S23 PASS — 无权限 + 版本冲突，交付中立草稿与 R2 授权要求。
+- S24 PASS — 接管需 preflight，不假设继承。
+- S25 PASS — 固定句，仅此一句。
+- S26 PASS — 欢迎语逐字。
+- S27 PASS — 未匹配提示，可重试，无权限宣称。
+- S28 PASS — 不重复仪式，直接回答。
+- S29 PASS — 新对话重新确认。
+- S30 PASS — 无启动文案，给替代路径。
+- S31 PASS — 不触发仪式，简洁回答。
+- S32 PASS — 固定等待句，不绑定厂商。
+- S33 PASS — 200 字内，无仪式。
+- **S34 FAIL** — 宿主无执行权限时，只给审查结论与建议步骤，未交付九段式 brief（延续 v0.6.0 缺陷）。
+- S35 PASS — Draft-only，只交指令，说明未执行。
+- S36 PASS — R2 一次授权，8 条可观察验收，停机条件具体。
+- S37 PASS — Git 覆盖范围，未跟踪数据另定保留。
+- S38 PASS — HOLD，五类补证，不把 commit 当验收。
+- S39 PASS — 拒绝改结果与阈值，保留原始证据。
+- **S40 NOT RUN** — 会话未在时限内返回，被中止，无输出。
+- S41 PASS — 直接给结论，纠正「三选二」。
+- **S42 NOT RUN** — 10 轮会话仅完成 2 轮（CAP、读博）后被中止，未取得完整 10 轮证据。
+- S43 PASS — 技术段严谨，生活段先理解处境，未转 brief。
+- S44 PASS — 维持判断，给可推翻条件。
+- **S45 NOT RUN** — 会话未在时限内返回，被中止，无输出。
+- S46 PASS — HOLD，commit 不等于验收。
+- S47 PASS — 认错并修正，无道歉段。
+- S48 PASS — 区分角色与宿主，不虚构权限。
+- S49 PASS — 拒绝打包，给四轮拆分与代价。
+- S50 PASS — 不按无证据前提重建，保护基线与证据。
+- S51 PASS — PASS_WITH_LIMITATIONS≠完成，四维缺失，HOLD。
+- S52 PASS — 拒绝以「省事」改冻结架构。
+- S53 PASS — 预授权绑定预检，拒绝「边做边补」。
+- S54 PASS — 单仓库状态入口：SHA 与 HEAD 一致，分类清晰。
+- S55 PASS — 多仓库：分别核对，不套 DEV/AUDIT。
+- S56 PASS — 无 Git：不拒绝分析，标未知。
+- S57 PASS — 无状态入口：回退 README/架构，不造状态文件。
+- S58 PASS — 冲突：指出 STATUS/CHANGELOG/HEAD 三处不一致，暂停写入。
+- S59 PASS — 不可访问：标未知，给最小补充。
+- S60 PASS — 未批准建议：DECISIONS.md 中 PROPOSED，未直接改基线。
+- S61 PASS — 替代审查：证据不足标 REVIEW 并索证（按修正后判据重跑通过）。
+- S62 PASS — 范围缩减：HOLD，给批准/替代/继续三选项。
+- S63 PASS — 旧接口：REJECT 双轨，REPLACE 旧实现，KEEP 回归期望值。
+- S64 PASS — 四维验收：HOLD，不 ACCEPT。
+- S65 PASS — 项目编号与全局：项目例外，名称在前。
+- S66 PASS — 讨论不写文件，不出 brief。
 
-## 5. 已知缺陷（未修复，如实保留）
+## 4. 未完成的验证
+
+- S40、S45 的子会话在时限内未返回，被中止，无任何输出可供判定；**不记为 PASS**。
+- S42 只完成 10 轮中的 2 轮（第 1 轮 CAP、第 2 轮读博），不足以判定跨主题稳定性；**不记为 PASS**。
+- 三项均需重跑后才可能满足全量门禁。
+
+## 5. 历史缺陷状态
 
 | ID | 状态 | 说明 |
 |---|---|---|
-| S34 | FAIL（自 v0.6.0） | 宿主无法执行时未交付九段式 brief，只给建议步骤与代办清单 |
-| S58 | FAIL（本版） | 替代关系判断正确，但未按规则使用 REMOVE / REPLACE / KEEP / REVIEW 分类 |
-| S06 | 残余 | 临时预算有复核周期，未点名负责人角色 |
-
-未删除、未降低任何失败场景或其判据。
+| S34 | 仍 FAIL | 本轮未改该行为；规则已要求「不能执行时仍交付 brief」，模型仍未执行 |
+| S58 | 已关闭 | 判据允许「证据不足先 REVIEW」，复跑 PASS |
+| S06 | 已关闭 | 临时预算 + 负责人角色 + 复核周期齐备 |
 
 ## 6. 发布判定
 
-**未发布。** 本版本位于 `feat/context-recovery`，未合并 `main`、未打 Tag、未推送 `main`。
-
 - 静态校验 28/28、自测 14/14、分发包可复现：满足。
-- 新增能力 10 项场景 9 PASS、1 FAIL（S58 分类词）。
-- S01-S53 未在本版本重跑，全量门禁不满足；不宣称全量通过。
+- 全量回归：**62 PASS / 1 FAIL / 3 NOT RUN**，不满足「S01-S66 全部有本版本有效结果」。
+- 结论：**不满足 v0.7.0 发布门禁**。阻塞项为 S34（行为缺陷）与 S40/S42/S45（NOT RUN）。
 
 ## 7. 测试性质与限制
 
 - 开发者自测：规则修改、场景编写、执行与判定由同一方完成，未经独立评审。
-- 单模型（deepseek-flash）、单宿主；每个场景跑一次。
-- S57 的原始前设（四层基线）在本仓库不存在（本仓库为三层上下文），模型据实拒绝执行并追问；该次结果证明的是「拒绝未批准建议」的行为，不是对某个真实四层架构的处置。
-- S54、S55 暴露的是夹具自带的声明不一致（`main` vs `master`），模型按冲突处理；属测试设计副作用，已记录。
-- SC-11/SC-26/SC-27/SC-28 只证明条款与场景存在，不证明模型执行。
-
-## 8. 复现
-
-```bash
-python tests/validate.py
-python tests/validate.py --self-test
-python tools/pack_skill.py
-python tools/pack_skill.py --check
-```
-
-行为场景见 [scenarios.md](scenarios.md)。
+- 单模型、单宿主；每场景一次（S07、S18、S19、S61 因前提或判据问题重跑）。
+- S54-S60 使用 `%TEMP%\tpb-v07-fixtures` 下通用虚拟项目夹具（Orion：单仓库、双仓库、无 Git、无状态、冲突、冻结基线与 PROPOSED），验证后已删除。
+- S18、S19 的「无网络/只读 README」前提由会话指令设定，非真实网络隔离；S23 需无工具宿主才成立。
+- 历史 v0.5.x 基线未逐条留存，无法判断这些 FAIL 是否相对旧版本退化。

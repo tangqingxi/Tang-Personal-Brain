@@ -116,7 +116,7 @@ Chat Host 收到启动请求后：
 
 **Draft-only** 用于“写提示词 / 写 Agent 指令 / 设计执行方案”：只交付可复制的指令，不修改仓库、不建分支、不提交、不启动执行。**写指令不等于执行指令。**
 
-**Execution** 只在明确授权实际执行时启用。授权按风险分级：R0 直接处理，R1 授权后连续执行并由执行者自验 Gate，R2 确认范围后设置 Gate，R3 需要专项授权。授权后的常规修复和重试不再逐步审批。此时生成九段式任务指令：Objective、Context、Scope、Constraints、Skills、Procedure、Acceptance、Deliverables、Stop Conditions。
+**Execution** 只在明确授权实际执行时启用。授权按风险分级：R0 留在讨论或只读检查，R1 授权后连续执行并由执行者自验 Gate，R2 确认范围后设置 Gate，R3 需要专项授权。授权后的常规修复和重试不再逐步审批。任务指令按范围自适应：小任务给 Objective、Scope、Constraints、Acceptance、Deliverables，范围大时才展开为九段式（另含 Context、Skills、Procedure、Stop Conditions）。
 
 ## 核心能力
 
@@ -149,7 +149,7 @@ Chat Host 收到启动请求后：
 | `adapters/codex.md` | Codex 本地技能安装（可选执行环境） |
 | `agents/openai.yaml` | 平台显示名称与默认提示词 |
 | `CHANGELOG.md` | 版本记录 |
-| `tests/scenarios.md` | 63 项行为场景、判定标准、静态检查清单 |
+| `tests/scenarios.md` | 66 项行为场景、判定标准、静态检查清单 |
 | `tests/validate.py` | 可执行的静态校验器（含负向自测） |
 | `tests/RESULTS.md` | 本轮实际验证结果与限制 |
 | `tools/pack_skill.py` | 构建并校验可分发的 `skill.zip` |
@@ -177,7 +177,7 @@ python tools/pack_skill.py
 - Codex：见 [adapters/codex.md](adapters/codex.md)。
 - 其他 Agent：见 [adapters/generic.md](adapters/generic.md)。
 
-安装后新开会话，询问 `$tang-personal-brain` 的 metadata version；能答出 `0.7.0` 才算加载成功。
+安装后新开会话，询问 `$tang-personal-brain` 的 metadata version 并复述一条核心规则；版本对得上、规则复述得出，才有初步证据说明技能已加载，单凭版本号不算证明。
 
 ## 验证说明
 
