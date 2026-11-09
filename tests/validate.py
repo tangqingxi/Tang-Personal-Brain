@@ -122,6 +122,16 @@ SCENARIO_TOKENS = {
     "S51": ["claimed", "verified"],
     "S52": ["冻结"],
     "S53": ["preflight"],
+    "S54": ["STATUS.md"],
+    "S55": ["SHA"],
+    "S56": ["未知"],
+    "S57": ["PROPOSED"],
+    "S58": ["REMOVE"],
+    "S59": ["范围"],
+    "S60": ["接口"],
+    "S61": ["HOLD"],
+    "S62": ["全局"],
+    "S63": ["讨论"],
 }
 DISPLAY_NAME = "星核 · NEXUS"
 STARTUP_WAIT = "星核 · NEXUS 在线。等待指挥官身份确认。"
@@ -531,11 +541,11 @@ def sc10() -> str:
     return f"1 skill entry, {len(agent_entries)} agent entries"
 
 
-@check("SC-11", "53 behavioural scenarios with required parts")
+@check("SC-11", "63 behavioural scenarios with required parts")
 def sc11() -> str:
     text = read_text("tests/scenarios.md")
     matches = list(re.finditer(r"^## (S\d{2}) — (.+)$", text, re.MULTILINE))
-    expected = [f"S{index:02d}" for index in range(1, 54)]
+    expected = [f"S{index:02d}" for index in range(1, 64)]
     found = [match.group(1) for match in matches]
     if found != expected:
         fail(f"scenario IDs are {found}; expected {expected}")
@@ -548,7 +558,7 @@ def sc11() -> str:
         missing = [token for token in SCENARIO_TOKENS[match.group(1)] if token not in block]
         if missing:
             fail(f"{match.group(1)} is missing coverage token(s): {', '.join(missing)}")
-    return "S01-S53 with type/input/expected/criteria"
+    return "S01-S63 with type/input/expected/criteria"
 
 
 @check("SC-12", "no unfinished TODO placeholders")
@@ -876,6 +886,31 @@ def sc27() -> str:
     if missing:
         fail("v0.6.0 release fixes missing: " + ", ".join(missing))
     return "provisional budget, owner/cadence, count separation and S08/S12 premises present"
+
+
+@check("SC-28", "v0.7 architecture supervision and cold-start rules are present")
+def sc28() -> str:
+    skill = read_text("SKILL.md")
+    decision = read_text("references/decision-governance.md")
+    context = read_text("references/context-evolution.md")
+    orchestration = read_text("references/orchestration.md")
+    required = {
+        "decision-governance Replacement review": "Replacement review" in decision,
+        "decision-governance Product scope protection": "Product scope protection" in decision,
+        "decision-governance Four acceptance dimensions": "Four acceptance dimensions" in decision,
+        "decision-governance HOLD verdict": "HOLD" in decision,
+        "decision-governance legacy governance": "Legacy and version governance" in decision,
+        "context-evolution Cold start": "Cold start" in context,
+        "context-evolution STATUS.md entry": "STATUS.md" in context,
+        "orchestration Cold start": "Cold start" in orchestration,
+        "orchestration PROPOSED split": "PROPOSED" in orchestration,
+        "SKILL.md replacement review": "replacement" in skill,
+        "SKILL.md cold start": "Cold start" in skill,
+    }
+    missing = [name for name, present in required.items() if not present]
+    if missing:
+        fail("v0.7 rules missing: " + ", ".join(missing))
+    return "replacement review, scope protection, four dimensions, legacy governance and cold start present"
 
 
 def run_checks() -> int:

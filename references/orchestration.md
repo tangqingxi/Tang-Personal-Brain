@@ -166,7 +166,7 @@ Then:
 1. Compare the artifact to the brief, not to the summary.
 2. Mark each criterion `pass`, `fail`, or `unverified`; never turn NOT RUN, smoke, a commit, or a config build into a pass.
 3. Spot-check at least one claim directly.
-4. Verdict: `ACCEPT`, `CONDITIONAL` (name the missing evidence), or `REJECT` (name the gap).
+4. Verdict: `ACCEPT`, `HOLD` (name the missing evidence; previously reported as `CONDITIONAL`), or `REJECT` (name the gap).
 5. Record the verdict and the next action in the project state.
 
 Rejection feedback names the exact gap and the evidence required. "再检查一下" is not actionable.
@@ -220,9 +220,23 @@ Report the exact condition, what remains safe to do, and the decision needed fro
 
 After execution, report in this order:
 
-1. Outcome: accepted, conditional, or rejected.
+1. Outcome: accepted, on hold, or rejected.
 2. Evidence: the one or two checks that justify the verdict.
 3. Difference or risk: what diverged from the brief, and how serious it is.
 4. Next: one action and its owner.
 
 Link artifacts; do not paste full logs or restate the executor's whole report. The user is making decisions, not reading the transcript.
+
+## 14. Cold start and status entry
+
+At a session start, a project switch, or a request to continue an earlier project:
+
+1. Confirm the project repository address; if more than one project is active, confirm which one.
+2. Read the project's status entry first (`STATUS.md` or the project's equivalent), then only the architecture and evidence the current task needs.
+3. Verify the DEV/AUDIT revisions it names against the actual commits: branch, SHA, clean or dirty. A status file is a claim until it matches.
+4. Report the state in four groups: verified facts, approved decisions, PROPOSED items, HOLD items.
+5. If the status file, the source tree and the acceptance evidence disagree, report the conflict and stop state-dependent work; do not settle it from chat memory.
+6. If the repository is unreachable, mark `Unavailable` or `Unknown` and say what is missing.
+7. If the project has no status entry, fall back to README, the architecture baseline and handoff material, and mark anything unverifiable as unknown.
+
+Do not create a status file just to complete the ritual, and do not modify project files during a discussion. The project maintains its own state; the Brain only reads it.
