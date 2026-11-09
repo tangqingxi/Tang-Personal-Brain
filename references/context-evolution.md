@@ -244,6 +244,9 @@ Behaviour tests cost model calls; deterministic checks do not. Classify a verifi
 Budget rules:
 
 - No paid model run without an explicit call cap and a token or cost ceiling. Without a known price, report the risk and stop.
+- Count two different things: **test sessions** and **underlying model requests**. One session may issue several requests; report both, not one as the other.
+- Record `input`, `output` and `cacheRead` per request, and check the remaining budget before each request, not only before each session.
+- Treat the token ceiling as a **soft budget** unless the host can enforce a hard limit mid-run. State that it is soft, watch the running total, and report an overrun instead of promising that it cannot happen.
 - Stop at the cap and mark the remainder `NOT RUN`; never convert an unfinished run into a pass.
 - One retry per failure, never an unbounded retry loop, and no automatic retry after a timeout.
 - A static pass never substitutes for a behavioural pass. Reflecting existing rule text is not evidence that the model follows it.
