@@ -4,12 +4,15 @@
 
 - Architecture supervision added to decision-governance: replacement review (§6) with REMOVE / REPLACE / KEEP / REVIEW, product scope protection, legacy and version governance, and four acceptance dimensions in §8 (function, architecture, technical debt, governance).
 - Verdict vocabulary unified: ACCEPT / HOLD / REJECT. HOLD replaces CONDITIONAL when evidence is missing and work is paused.
-- Cold start defined once, without assuming a project layout: orchestration §14 holds the executable steps; context-evolution §14 holds the source authority order and conflict rules. `STATUS.md`, DEV/AUDIT and Git SHAs are optional evidence forms, not requirements. Cold start works for one repository, several repositories, a local folder, documents, or conversation-only facts, and never blocks ordinary discussion.
+- Cold start defined once, without assuming a project layout: orchestration §14 holds the executable steps; context-evolution §14 holds the source authority and conflict rules. `STATUS.md`, DEV/AUDIT and Git SHAs are optional evidence forms, not requirements. Cold start works for one repository, several repositories, a local folder, documents, or conversation-only facts, and never blocks ordinary discussion.
+- Authority fixed to follow the kind of question, not one ranking: progress comes from the status record after checking, architecture and approved decisions from the baseline and decision records, what exists from the implementation, what is allowed from the authorization record. A status index no longer outranks an approved architecture decision.
 - Replacement review now allows REVIEW (plus a request for diff and migration evidence) when only an agent claim exists; classification is required only when evidence supports it, so no deletion conclusion is invented to satisfy a label.
+- Verification now has cost tiers L0-L3 with a model-budget rule (call cap, token or cost ceiling, one retry, stop at the cap and mark NOT RUN, no static-for-behaviour substitution, no REPLAY claim without the original output). Documented in context-evolution §15 and summarised in the scenarios header.
 - SKILL.md strengthened in Independent judgment and Context and memory; body stays at the 200-line limit.
-- Added S54-S66 and static check SC-28; SC-11 now expects S01-S66. Scenario names, fixtures and repositories are generic; the normal-recovery and conflict scenarios are separate.
-- Full regression S01-S66 executed for this version: 62 PASS, S34 FAIL, S40/S42/S45 NOT RUN. S34 still returns review next steps instead of a nine-section brief when the host cannot execute; S42 completed 2 of 10 turns before being stopped.
-- Static validation 28/28 and validator self-tests 14/14 passed; archive reproducible. All results remain developer self-test, not independent review.
+- Scenario numbering restored: S54-S63 keep the v0.7.0 initial numbers and semantics; new layout-independent cases are appended as S64-S67. SC-11 now expects S01-S67; SC-29 checks the verification tiers.
+- S34 criterion aligned with adaptive briefs: a deliverable task instruction is required even when the host cannot execute, but five sections are enough for a small change. The nine-section form is no longer forced everywhere.
+- Evidence retained: the earlier S34 FAIL (no brief), the S58 label FAIL (closed by the REVIEW allowance) and the S40/S42/S45 NOT RUN entries stay on record under their original numbers. The 66-scenario regression results from the previous commit apply to S01-S53 and S54-S63 by number; S64-S67 have not been run yet.
+- Static validation 28/28 and validator self-tests 14/14 passed; archive reproducible. No paid model calls were made in this round; all results are developer self-test.
 
 ## 0.6.0 — 2026-11-07
 

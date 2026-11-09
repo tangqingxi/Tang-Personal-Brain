@@ -149,7 +149,7 @@ Chat Host 收到启动请求后：
 | `adapters/codex.md` | Codex 本地技能安装（可选执行环境） |
 | `agents/openai.yaml` | 平台显示名称与默认提示词 |
 | `CHANGELOG.md` | 版本记录 |
-| `tests/scenarios.md` | 66 项行为场景、判定标准、静态检查清单 |
+| `tests/scenarios.md` | 67 项行为场景、判定标准、静态检查清单 |
 | `tests/validate.py` | 可执行的静态校验器（含负向自测） |
 | `tests/RESULTS.md` | 本轮实际验证结果与限制 |
 | `tools/pack_skill.py` | 构建并校验可分发的 `skill.zip` |

@@ -102,7 +102,7 @@ SCENARIO_TOKENS = {
     "S31": ["不触发"],
     "S32": ["Chat Host"],
     "S33": ["指挥官"],
-    "S34": ["Objective", "Stop Conditions"],
+    "S34": ["Objective", "Acceptance"],
     "S35": ["任务指令"],
     "S36": ["Gate"],
     "S37": ["Git"],
@@ -123,18 +123,19 @@ SCENARIO_TOKENS = {
     "S52": ["冻结"],
     "S53": ["preflight"],
     "S54": ["STATUS.md"],
-    "S55": ["多个仓库"],
-    "S56": ["没有 Git"],
-    "S57": ["回退"],
-    "S58": ["冲突"],
-    "S59": ["Unavailable"],
-    "S60": ["PROPOSED"],
-    "S61": ["REVIEW"],
-    "S62": ["范围"],
-    "S63": ["接口"],
-    "S64": ["HOLD"],
-    "S65": ["全局"],
-    "S66": ["讨论"],
+    "S55": ["SHA"],
+    "S56": ["未知"],
+    "S57": ["PROPOSED"],
+    "S58": ["REVIEW"],
+    "S59": ["范围"],
+    "S60": ["接口"],
+    "S61": ["HOLD"],
+    "S62": ["全局"],
+    "S63": ["讨论"],
+    "S64": ["多个仓库"],
+    "S65": ["没有 Git"],
+    "S66": ["Unavailable"],
+    "S67": ["冲突"],
 }
 DISPLAY_NAME = "星核 · NEXUS"
 STARTUP_WAIT = "星核 · NEXUS 在线。等待指挥官身份确认。"
@@ -544,11 +545,11 @@ def sc10() -> str:
     return f"1 skill entry, {len(agent_entries)} agent entries"
 
 
-@check("SC-11", "66 behavioural scenarios with required parts")
+@check("SC-11", "67 behavioural scenarios with required parts")
 def sc11() -> str:
     text = read_text("tests/scenarios.md")
     matches = list(re.finditer(r"^## (S\d{2}) — (.+)$", text, re.MULTILINE))
-    expected = [f"S{index:02d}" for index in range(1, 67)]
+    expected = [f"S{index:02d}" for index in range(1, 68)]
     found = [match.group(1) for match in matches]
     if found != expected:
         fail(f"scenario IDs are {found}; expected {expected}")
@@ -561,7 +562,7 @@ def sc11() -> str:
         missing = [token for token in SCENARIO_TOKENS[match.group(1)] if token not in block]
         if missing:
             fail(f"{match.group(1)} is missing coverage token(s): {', '.join(missing)}")
-    return "S01-S66 with type/input/expected/criteria"
+    return "S01-S67 with type/input/expected/criteria"
 
 
 @check("SC-12", "no unfinished TODO placeholders")
@@ -914,6 +915,26 @@ def sc28() -> str:
     if missing:
         fail("v0.7 rules missing: " + ", ".join(missing))
     return "replacement review, scope protection, four dimensions, legacy governance and cold start present"
+
+
+@check("SC-29", "verification levels and model budget are documented")
+def sc29() -> str:
+    context = read_text("references/context-evolution.md")
+    scenarios = read_text("tests/scenarios.md")
+    required = {
+        "context L0": "L0" in context,
+        "context L1": "L1" in context,
+        "context L2": "L2" in context,
+        "context L3": "L3" in context,
+        "context call cap": "call cap" in context,
+        "context NOT RUN": "NOT RUN" in context,
+        "context replay limit": "REPLAY" in context,
+        "scenarios cost tiers": "L0" in scenarios and "L3" in scenarios,
+    }
+    missing = [name for name, present in required.items() if not present]
+    if missing:
+        fail("verification levels missing: " + ", ".join(missing))
+    return "L0-L3, call cap, NOT RUN and REPLAY limits documented"
 
 
 def run_checks() -> int:
