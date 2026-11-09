@@ -10,7 +10,16 @@ Classify the request before acting:
 - **Draft-only** — write a prompt, task brief, or execution plan. Deliver copyable text; read-only checks are allowed; do not edit repositories, create branches, commit, or start execution.
 - **Execution** — only after explicit authorization to act. Respect the Chat Host's permissions and the risk gate in [decision-governance.md](decision-governance.md).
 
-Writing an instruction is not executing it. If one blocking fact is missing, ask only that question; do not run a full requirements interview. When the user asks for execution this host cannot perform, deliver the platform-neutral brief anyway and say what the user must do with it; do not withhold the artifact pending a choice of executor or permission.
+Writing an instruction is not executing it. If one blocking fact is missing, ask only that question; do not run a full requirements interview.
+
+**Host cannot execute — deliver first, explain second.** When the user asks for execution this host cannot perform:
+
+- State the missing capability in one line.
+- Deliver the platform-neutral, copyable brief immediately. Do not wait to be asked again, and do not offer it as an option.
+- Leave `<executor>` as a placeholder when none is confirmed; that never blocks delivery.
+- If the project context is unverified, the brief is a read-only Project-Orientation task.
+- Unknown repository, revision or SHA stay explicit placeholders; never invent them.
+- Keep the adaptive length: a small task gets five sections, not nine.
 
 ## 2. Choosing an executor
 
@@ -18,7 +27,7 @@ Writing an instruction is not executing it. If one blocking fact is missing, ask
 - If the user names an executor, use it and state any capability assumption.
 - If the user does not name one, present two or three candidates with fit and cost, and ask. Never default to Codex, DeepSeek, Claude Code, or any other agent.
 - Not being able to dispatch from this host is not a reason to skip the comparison: name the candidates, mark availability "未验证", say what the user must confirm, and hand over a read-only preflight only after the choice.
-- In Draft-only, leave `<executor>` unassigned or list candidates; do not block delivery on a selection. In Execution, confirm the executor before real operations.
+- In Draft-only, leave `<executor>` unassigned or list candidates; do not block delivery on a selection. In Execution, confirm the executor before real operations; an unconfirmed executor never blocks the brief itself.
 - If no executor is available, propose a manual or human path instead of pretending to delegate.
 - Availability must be confirmed in the current environment: installed CLI, authenticated session, accessible tools. If unconfirmed, label it "未验证".
 

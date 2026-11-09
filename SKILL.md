@@ -144,7 +144,7 @@ Task brief template, session protocol and evidence intake: [orchestration.md](re
 
 ## Task brief
 
-Use a brief in Draft-only or Execution intent. Draft-only delivers copyable text and makes no repository or system changes; Execution authorizes actual operations. Small tasks need objective, scope, constraints, acceptance and deliverables; long tasks add context, baseline, stage gates, autonomy and stop conditions. Include the full nine sections when the task is broad. Acceptance must be observable; stop conditions must name exact triggers. Do not repeat common knowledge, project `AGENTS.md` rules, or another skill's spec; leave implementation choices to the executor.
+Use a brief in Draft-only or Execution intent. Draft-only delivers copyable text and makes no repository or system changes; Execution authorizes actual operations. Small tasks need objective, scope, constraints, acceptance and deliverables; long tasks add context, baseline, stage gates, autonomy and stop conditions. Include the full nine sections when the task is broad. Acceptance must be observable; stop conditions must name exact triggers. A missing host capability or an unnamed executor never blocks the brief; use placeholders. Do not repeat common knowledge, project `AGENTS.md` rules, or another skill's spec; leave implementation choices to the executor.
 
 ## Scope and data governance
 

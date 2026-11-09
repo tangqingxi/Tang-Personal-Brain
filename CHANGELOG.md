@@ -13,8 +13,9 @@
 - S34 criterion aligned with adaptive briefs: a deliverable task instruction is required even when the host cannot execute, but five sections are enough for a small change. The nine-section form is no longer forced everywhere.
 - Evidence retained: the earlier S34 FAIL (no brief), the S58 label FAIL (closed by the REVIEW allowance) and the S40/S42/S45 NOT RUN entries stay on record under their original numbers. The 66-scenario regression results from the previous commit apply to S01-S53 and S54-S63 by number; S64-S67 have not been run yet.
 - Release gate aligned: context-evolution §11 no longer demands a full regression for every minor release; it now requires L0 passing, L1-or-above evidence for the touched rule groups, and disclosed limitations, matching §15. Rule-to-scenario mappings added for cold start, replacement/scope/legacy and verification/host limits.
-- Final candidate round used one paid call (budget: 4 calls / 30k tokens). S34 failed again: with no write, shell or git access it offered two paths instead of delivering a transferable brief, so the paid phase stopped per the budget rule. S64, S65 and S67 were not run; S40, S42 and S45 remain NOT RUN. Verdict: HOLD.
-- Static validation 29/29 and validator self-tests 14/14 passed; archive reproducible. Token usage of the paid call is not observable in this host, so cost control is claimed only for call count, not for exact tokens.
+- S34 fix: orchestration §1 now puts "host cannot execute" in its own clause — state the missing capability in one line, then deliver the brief immediately with placeholder executor and placeholders for unknown repo, revision or SHA; unverified context yields a read-only Project-Orientation brief, and small tasks stay five sections. §2 adds that an unconfirmed executor never blocks the brief; SKILL.md's task-brief line says the same (body stays at 200 lines).
+- S34 retest: one paid call. PASS — the reply declared the missing capability and then delivered a five-section brief with placeholders instead of offering options. Evidence is the subagent's description of its output; the verbatim text was not captured within the budget.
+- Static validation 29/29 and validator self-tests 14/14 passed; archive reproducible. Candidate verdict: ACCEPT for NEXUS review, with L2/L3, S40, S42, S45 and S64-S67 still unverified.
 
 ## 0.6.0 — 2026-11-07
 
