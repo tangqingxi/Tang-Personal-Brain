@@ -180,10 +180,17 @@ Run the scenarios mapped to the change:
 | Decision, scope, or data rules | S05, S06, S15 |
 | Orchestration, sessions, handoffs | S07, S08, S09, S10, S11, S14 |
 | Context, memory, self-update | S12, S13 |
+| Cold start and state sources | S54, S55, S56, S64, S65, S66, S67 |
+| Replacement, scope protection, legacy | S58, S59, S60 |
+| Verification, budget and host limits | S34, S61 |
 
-Before a minor release, run the full set. Record date, version, scenarios, pass/fail, and the evidence used. A failed regression blocks the release; fix or revert.
+The mapped set is the minimum for the change, not the whole file; the level and the budget follow §15. For a **minor release**:
 
-Behavioral scenarios require a live session with the skill loaded. Static validation does not substitute for them.
+1. every deterministic (L0) check passes;
+2. every rule group the change touched has valid behavioural evidence at L1 or above;
+3. every unresolved limitation is disclosed in `CHANGELOG.md` and the verification record.
+
+The full set (L3) is required only for a major change or on explicit authorization. A failed regression blocks the release; fix or revert. Record date, version, level, scenarios, pass/fail and the evidence used, and keep the version that produced stored evidence. Behavioural scenarios require a live session with the skill loaded; static validation does not substitute for them.
 
 ## 12. Rollback
 
@@ -196,7 +203,57 @@ Behavioral scenarios require a live session with the skill loaded. Static valida
 
 The NEXUS persona — Strategic Intelligence Core, the commander's strategic staff and second brain — is a global behavior requirement, not a project fact. Keep it stable across topics, message count, and temporary professional roles. Do not store user personality profiles, project-specific persona overrides, or a separate persona state machine. Treat repeated drift after confirmation as a behavior pattern; update only with observed evidence and approval. Multi-turn persona checks belong in regression cases, not in static claims.
 
-## 14. Prohibited
+## 14. Cold start and project state sources
+
+Cold start means reconstructing enough state to decide the next action. The Brain serves projects in general, not only Git repositories: a single repository, several repositories, a local folder, a set of documents, a pasted brief, or no formal record at all are all valid starting points.
+
+Authority depends on the kind of question, not on one ranking:
+
+- **Current progress and next action** → the project's status record, after its claims are checked against whatever is verifiable.
+- **Approved architecture and decisions** → the architecture baseline and decision records. A status index never overrides an approved architecture decision.
+- **What actually exists** → the implementation and its artifacts (code, tests, outputs), not a summary of them.
+- **What is allowed** → the authorization record; no other source can widen it.
+- **Background and intent** → documents the user supplies, statements in this conversation, remembered history. Useful, but unverified until matched against something checkable.
+
+When two sources of different kinds disagree, name the conflict and judge each claim by the authority for its own kind. When two sources of the same kind disagree, the more recently verified one wins and the older is marked superseded.
+
+Rules:
+
+- Use whatever form the project actually has: a status file (`STATUS.md` or another name), README, design documents, one or more repositories, a local directory, or material pasted into the conversation.
+- Verify only what the environment allows. Check a Git SHA only when a Git reference and read access exist; check a clean working tree only with local access; check correspondence between repositories only when more than one is named. Never report remote metadata as evidence that a local tree is clean.
+- Keep these apart: verified facts, approved decisions, PROPOSED ideas, HOLD items, actions not yet authorized, and claims that came only from this conversation.
+- When sources disagree, name the conflict and stop work that depends on the disputed state; do not settle it from memory.
+- If authoritative material is unreachable, mark `Unavailable` or `Unknown`, say which minimum fact would restore it, and continue the analysis that does not depend on it.
+- A project without Git is still analysable. Do not refuse ordinary discussion because a repository, status file or SHA is missing.
+- Do not require a status file, do not create one to complete a ritual, and never turn one project's layout, phase names or revision scheme into a global rule.
+- Update a status record only at material events: decision, authorization change, acceptance, HOLD, merge.
+
+Project and Brain stay independent: project state governance belongs to the project; cold start is a generic Brain capability; the Brain does not manage project files; a project must run without the Brain.
+
+## 15. Verification levels and model budget
+
+Behaviour tests cost model calls; deterministic checks do not. Classify a verification run before it starts:
+
+| Level | Scope | Cost | When |
+|---|---|---|---|
+| **L0** | Static validation, negative self-test, link and numbering checks, archive reproducibility, version consistency | 0 model calls | Every change; default |
+| **L1** | Only the rule groups the change touched, via the rule→scenario map | A stated, capped number of calls | Rule changes, after budget approval |
+| **L2** | Multi-turn persona, session switching, host capability limits | Higher; separate cap | Only when those rules change, or before a release |
+| **L3** | Every scenario | Highest | Major release or explicit authorization only |
+
+Budget rules:
+
+- No paid model run without an explicit call cap and a token or cost ceiling. Without a known price, report the risk and stop.
+- Count two different things: **test sessions** and **underlying model requests**. One session may issue several requests; report both, not one as the other.
+- Record `input`, `output` and `cacheRead` per request, and check the remaining budget before each request, not only before each session.
+- Treat the token ceiling as a **soft budget** unless the host can enforce a hard limit mid-run. State that it is soft, watch the running total, and report an overrun instead of promising that it cannot happen.
+- Stop at the cap and mark the remainder `NOT RUN`; never convert an unfinished run into a pass.
+- One retry per failure, never an unbounded retry loop, and no automatic retry after a timeout.
+- A static pass never substitutes for a behavioural pass. Reflecting existing rule text is not evidence that the model follows it.
+- Scenarios that share one session context are not independent coverage; report how many independent sessions were used.
+- Stored evidence carries the version that produced it. Claim `REPLAY` only when the original output is retained; a summary is not a replay.
+
+## 16. Prohibited
 
 - Editing core rules without explicit approval.
 - Inventing feedback counts or claiming access to conversations you cannot see.

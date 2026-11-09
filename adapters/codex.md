@@ -59,7 +59,7 @@ $CODEX_HOME/skills/tang-personal-brain/SKILL.md
    使用 $tang-personal-brain，报告 metadata version，并给出你的默认回答结构。
    ```
 
-   预期版本 `0.6.0`，回答先给结论、区分已验证与未验证。
+   预期版本 `0.7.0`，回答先给结论、区分已验证与未验证。
 
 3. 如果技能没有被发现，检查目录层级、文件名大小写和 `SKILL.md` 的 frontmatter；然后重启 Codex 或新开会话。
 

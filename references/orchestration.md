@@ -10,7 +10,16 @@ Classify the request before acting:
 - **Draft-only** — write a prompt, task brief, or execution plan. Deliver copyable text; read-only checks are allowed; do not edit repositories, create branches, commit, or start execution.
 - **Execution** — only after explicit authorization to act. Respect the Chat Host's permissions and the risk gate in [decision-governance.md](decision-governance.md).
 
-Writing an instruction is not executing it. If one blocking fact is missing, ask only that question; do not run a full requirements interview. When the user asks for execution this host cannot perform, deliver the platform-neutral brief anyway and say what the user must do with it; do not withhold the artifact pending a choice of executor or permission.
+Writing an instruction is not executing it. If one blocking fact is missing, ask only that question; do not run a full requirements interview.
+
+**Host cannot execute — deliver first, explain second.** When the user asks for execution this host cannot perform:
+
+- State the missing capability in one line.
+- Deliver the platform-neutral, copyable brief immediately. Do not wait to be asked again, and do not offer it as an option.
+- Leave `<executor>` as a placeholder when none is confirmed; that never blocks delivery.
+- If the project context is unverified, the first brief authorises read-only Project-Orientation only — no edit, commit or push. A write brief needs separate authorisation after the precheck confirms repository, revision and environment.
+- Unknown repository, revision or SHA stay explicit placeholders; never invent them.
+- Keep the adaptive length: a small task gets five sections, not nine.
 
 ## 2. Choosing an executor
 
@@ -18,7 +27,7 @@ Writing an instruction is not executing it. If one blocking fact is missing, ask
 - If the user names an executor, use it and state any capability assumption.
 - If the user does not name one, present two or three candidates with fit and cost, and ask. Never default to Codex, DeepSeek, Claude Code, or any other agent.
 - Not being able to dispatch from this host is not a reason to skip the comparison: name the candidates, mark availability "未验证", say what the user must confirm, and hand over a read-only preflight only after the choice.
-- In Draft-only, leave `<executor>` unassigned or list candidates; do not block delivery on a selection. In Execution, confirm the executor before real operations.
+- In Draft-only, leave `<executor>` unassigned or list candidates; do not block delivery on a selection. In Execution, confirm the executor before real operations; an unconfirmed executor never blocks the brief itself.
 - If no executor is available, propose a manual or human path instead of pretending to delegate.
 - Availability must be confirmed in the current environment: installed CLI, authenticated session, accessible tools. If unconfirmed, label it "未验证".
 
@@ -166,7 +175,7 @@ Then:
 1. Compare the artifact to the brief, not to the summary.
 2. Mark each criterion `pass`, `fail`, or `unverified`; never turn NOT RUN, smoke, a commit, or a config build into a pass.
 3. Spot-check at least one claim directly.
-4. Verdict: `ACCEPT`, `CONDITIONAL` (name the missing evidence), or `REJECT` (name the gap).
+4. Verdict: `ACCEPT`, `HOLD` (name the missing evidence; previously reported as `CONDITIONAL`), or `REJECT` (name the gap).
 5. Record the verdict and the next action in the project state.
 
 Rejection feedback names the exact gap and the evidence required. "再检查一下" is not actionable.
@@ -220,9 +229,23 @@ Report the exact condition, what remains safe to do, and the decision needed fro
 
 After execution, report in this order:
 
-1. Outcome: accepted, conditional, or rejected.
+1. Outcome: accepted, on hold, or rejected.
 2. Evidence: the one or two checks that justify the verdict.
 3. Difference or risk: what diverged from the brief, and how serious it is.
 4. Next: one action and its owner.
 
 Link artifacts; do not paste full logs or restate the executor's whole report. The user is making decisions, not reading the transcript.
+
+## 14. Cold start
+
+At a session start, a project switch, or a request to continue an earlier project:
+
+1. Establish what exists: one repository, several repositories, a local folder, documents, a status entry, handoff material, or only the current conversation. If several projects are active, confirm which one.
+2. If a status entry exists, read it first; otherwise start from README, the architecture baseline and handoff material, and read only what the current task needs.
+3. Verify what the environment actually allows: a Git SHA when refs and access exist; working-tree state only with local access; repository correspondence only when several are named. A status file is a claim until it matches something checkable. Never present a remote-only check as a clean local tree.
+4. Report in five groups: verified facts, approved decisions, PROPOSED items, HOLD items, and unauthorized actions; mark claims that exist only in this conversation as unverified.
+5. When sources conflict, name the conflict and stop work that depends on the disputed state; ask for the smallest missing fact instead of settling it from memory.
+6. When authoritative material is unreachable, mark `Unavailable` or `Unknown`, state what minimum would restore it, and continue the parts that do not depend on it.
+7. With no status entry, do not create one during a discussion or a read-only pass; propose one only if the project will maintain it.
+
+Ordinary discussion is never blocked by a missing repository, status file or SHA. Do not modify project files during a discussion; the project maintains its own state.

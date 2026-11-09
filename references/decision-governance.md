@@ -140,6 +140,32 @@ Every dependency needs an owner, an update path and a removal path. Every new fi
 
 Put the scope boundary in the task brief's Scope and Constraints sections; an executor expands scope by default when the boundary is vague.
 
+### Replacement review
+
+When an agent adds a module, interface or feature, check the replacement relationship before accepting it:
+
+- Does the new implementation duplicate an existing one?
+- Does it replace an old interface — and which old files, branches and tests must migrate or be deleted?
+- Which old implementations still carry an independent responsibility and must stay?
+- Is there an unnecessary second path, compatibility switch, or duplicate data source?
+
+Classify with **REMOVE / REPLACE / KEEP / REVIEW** when a real replacement exists, and name what depends on each item. Do not produce a large audit table when there is no actual overlap; the check exists to prevent two live paths, not to create paperwork.
+
+### Product scope protection
+
+An agent may not shrink an approved product target because implementation is convenient, testing is hard, the workload is large, or it prefers another architecture. When the delivered scope conflicts with the approved baseline, or with `ARCHITECTURE.md`:
+
+1. State the original approval — where it came from and what it covered.
+2. State the actual change and its impact on behavior, interfaces and evidence.
+3. Pause the scope change; do not deliver a reduced target as if it were the agreed one.
+4. Wait for user approval, and record the decision.
+
+Passing tests do not satisfy product-scope acceptance.
+
+### Legacy and version governance
+
+Before a project's first public release, do not maintain internal interfaces that the new architecture has already replaced. Keep old code only when it still has an independent responsibility, a real external compatibility promise, or documented historical verification value. Test doubles, numerical regression fixtures and historical evidence are not deleted by default. Small development branches are deleted once their merge is accepted; they are not maintained indefinitely.
+
 ### Git-native workflow
 
 Git recovers committed source; it does not recover untracked data, large binaries, external state, or a production configuration. Use branches, commits and tags first. Do not snapshot the whole tree every round, duplicate full-tree hashes, or rehearse recovery without a named risk. Keep raw research data under a separate retention policy and audit reports to necessary evidence. If a project uses dual-repository audit, follow it; do not make it the default for every project.
@@ -191,6 +217,26 @@ Acceptance levels:
 
 Acceptance criteria must be observable and scoped: a command, a file, a behavior, a metric, a diff. "代码质量良好" is not a criterion.
 
+### Four acceptance dimensions
+
+One acceptance covers four separate questions; passing one does not carry the others:
+
+1. **Functional correctness** — the behavior does what was specified.
+2. **Architectural consistency** — it matches the baseline, and its replacement relationship is resolved (no unexplained second path).
+3. **Technical-debt convergence** — replaced paths, switches and duplicates are removed, or kept with a stated reason.
+4. **Project governance** — scope, authorization, evidence and state records match what was approved.
+
+Keep four states distinct and never collapse them:
+
+| State | Meaning |
+|---|---|
+| Agent claims done | The executor's assertion; E0, never acceptance |
+| Evidence provided | Commands, diff, artifact or checksum exist; still unreviewed |
+| Independently verified | The Brain or a second run checked the artifact itself |
+| Verdict | **ACCEPT**, **HOLD** (evidence missing; work paused; previously reported as CONDITIONAL), or **REJECT** |
+
+A test PASS is not an architecture ACCEPT, and a clean diff is not scope acceptance.
+
 ### Four evidence claims
 
 Keep these claims separate; none proves another:
@@ -207,7 +253,7 @@ Review procedure:
 1. Compare the delivered artifact to the stated criteria, not to the executor's summary.
 2. Spot-check at least one piece of evidence directly.
 3. Run one independent check when feasible (tests, lint, file read, hash).
-4. Record **ACCEPT**, **CONDITIONAL** (name the missing evidence), or **REJECT** (name the gap).
+4. Record **ACCEPT**, **HOLD** (name the missing evidence), or **REJECT** (name the gap).
 5. Do not silently re-scope to make a failed item pass.
 
 "Done" is the executor's state. "Accepted" is the Brain's and user's state. Keep them separate in every report.
