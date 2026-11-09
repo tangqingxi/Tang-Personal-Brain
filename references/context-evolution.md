@@ -180,10 +180,17 @@ Run the scenarios mapped to the change:
 | Decision, scope, or data rules | S05, S06, S15 |
 | Orchestration, sessions, handoffs | S07, S08, S09, S10, S11, S14 |
 | Context, memory, self-update | S12, S13 |
+| Cold start and state sources | S54, S55, S56, S67 |
+| Replacement, scope protection, legacy | S58, S59, S60 |
+| Verification, budget and host limits | S34, S61 |
 
-Before a minor release, run the full set. Record date, version, scenarios, pass/fail, and the evidence used. A failed regression blocks the release; fix or revert.
+The mapped set is the minimum for the change, not the whole file; the level and the budget follow §15. For a **minor release**:
 
-Behavioral scenarios require a live session with the skill loaded. Static validation does not substitute for them.
+1. every deterministic (L0) check passes;
+2. every rule group the change touched has valid behavioural evidence at L1 or above;
+3. every unresolved limitation is disclosed in `CHANGELOG.md` and the verification record.
+
+The full set (L3) is required only for a major change or on explicit authorization. A failed regression blocks the release; fix or revert. Record date, version, level, scenarios, pass/fail and the evidence used, and keep the version that produced stored evidence. Behavioural scenarios require a live session with the skill loaded; static validation does not substitute for them.
 
 ## 12. Rollback
 

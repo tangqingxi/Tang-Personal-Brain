@@ -12,7 +12,9 @@
 - Scenario numbering restored: S54-S63 keep the v0.7.0 initial numbers and semantics; new layout-independent cases are appended as S64-S67. SC-11 now expects S01-S67; SC-29 checks the verification tiers.
 - S34 criterion aligned with adaptive briefs: a deliverable task instruction is required even when the host cannot execute, but five sections are enough for a small change. The nine-section form is no longer forced everywhere.
 - Evidence retained: the earlier S34 FAIL (no brief), the S58 label FAIL (closed by the REVIEW allowance) and the S40/S42/S45 NOT RUN entries stay on record under their original numbers. The 66-scenario regression results from the previous commit apply to S01-S53 and S54-S63 by number; S64-S67 have not been run yet.
-- Static validation 28/28 and validator self-tests 14/14 passed; archive reproducible. No paid model calls were made in this round; all results are developer self-test.
+- Release gate aligned: context-evolution §11 no longer demands a full regression for every minor release; it now requires L0 passing, L1-or-above evidence for the touched rule groups, and disclosed limitations, matching §15. Rule-to-scenario mappings added for cold start, replacement/scope/legacy and verification/host limits.
+- Final candidate round used one paid call (budget: 4 calls / 30k tokens). S34 failed again: with no write, shell or git access it offered two paths instead of delivering a transferable brief, so the paid phase stopped per the budget rule. S64, S65 and S67 were not run; S40, S42 and S45 remain NOT RUN. Verdict: HOLD.
+- Static validation 29/29 and validator self-tests 14/14 passed; archive reproducible. Token usage of the paid call is not observable in this host, so cost control is claimed only for call count, not for exact tokens.
 
 ## 0.6.0 — 2026-11-07
 
