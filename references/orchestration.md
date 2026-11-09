@@ -17,7 +17,7 @@ Writing an instruction is not executing it. If one blocking fact is missing, ask
 - State the missing capability in one line.
 - Deliver the platform-neutral, copyable brief immediately. Do not wait to be asked again, and do not offer it as an option.
 - Leave `<executor>` as a placeholder when none is confirmed; that never blocks delivery.
-- If the project context is unverified, the brief is a read-only Project-Orientation task.
+- If the project context is unverified, the first brief authorises read-only Project-Orientation only — no edit, commit or push. A write brief needs separate authorisation after the precheck confirms repository, revision and environment.
 - Unknown repository, revision or SHA stay explicit placeholders; never invent them.
 - Keep the adaptive length: a small task gets five sections, not nine.
 

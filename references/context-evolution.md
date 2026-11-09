@@ -180,7 +180,7 @@ Run the scenarios mapped to the change:
 | Decision, scope, or data rules | S05, S06, S15 |
 | Orchestration, sessions, handoffs | S07, S08, S09, S10, S11, S14 |
 | Context, memory, self-update | S12, S13 |
-| Cold start and state sources | S54, S55, S56, S67 |
+| Cold start and state sources | S54, S55, S56, S64, S65, S66, S67 |
 | Replacement, scope protection, legacy | S58, S59, S60 |
 | Verification, budget and host limits | S34, S61 |
 
