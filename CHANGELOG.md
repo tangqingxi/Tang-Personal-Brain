@@ -18,7 +18,8 @@
 - S34 read-only boundary: the first brief for unverified context now authorises read-only Project-Orientation only; edits, commits and pushes need separate authorisation after the precheck. S34 checks that boundary explicitly while keeping the "must deliver the instruction" criterion.
 - S67 fixture rebuilt: an approved four-layer architecture baseline now conflicts with a STATUS file claiming three layers, so the scenario tests the authority rule rather than a SHA mismatch alone. The cold-start mapping in §11 now lists S64, S65 and S66.
 - Paid verification: budget was four scenarios and 200k total tokens; three calls used, 169,778 tokens (input 28,866 + output 5,104 + cacheRead 135,808). S34 PASS (read-only brief, verbatim), S67 PASS after a first call invalidated by a harness error (prompt forbade reading the fixture). S64 and S65 were not run because the remaining budget is below one call's fixed cost. Verdict: HOLD.
-- Static validation 29/29 and validator self-tests 14/14 passed; archive reproducible. Verdict: HOLD pending S64, S65 and the L2 set (S40, S42, S45).
+- Final cold-start verification: fixtures pre-checked without model calls (two repos without DEV/AUDIT, a non-Git folder, an unresolvable reserved domain). S64 PASS and S65 PASS with verbatim evidence. S66 was not run because two sessions already used 245,301 tokens against a 210,000 suggestion; the overrun came from longer read sequences and under-estimated cacheRead. S40, S42 and S45 remain NOT RUN and are out of scope for this minor release.
+- Static validation 29/29 and validator self-tests 14/14 passed; archive reproducible. Verdict: ACCEPT as release candidate, with S66 unverified and L2 out of scope.
 
 ## 0.6.0 — 2026-11-07
 
